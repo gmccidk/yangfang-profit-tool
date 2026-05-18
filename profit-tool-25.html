@@ -4535,53 +4535,94 @@
 
         // 收集已选菜品
         var selected = db.filter(function(i) { return i.qty > 0; }).sort(function(a, b) { return (a.manualOrder || 0) - (b.manualOrder || 0); });
+        if (!selected.length) {
+            showToast("购物车为空，无法导出", "warn");
+            return;
+        }
 
-        // 构建菜品行HTML
-        var rowsHtml = selected.map(function(item, idx) {
-            return '<tr>' +
-                '<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;color:#999;font-size:13px;text-align:center;">' + (idx + 1) + '</td>' +
-                '<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#ff6b35;background:#fff3ed;border-radius:4px;text-align:center;white-space:nowrap;">' + escapeHtml(item.分类) + '</td>' +
-                '<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:14px;font-weight:600;color:#1a1a1a;">' + escapeHtml(item.商品名称) + '</td>' +
-                '<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#999;text-align:right;">¥' + (item.成本 * item.qty).toFixed(2) + '</td>' +
-                '<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:13px;color:#666;text-align:center;">×' + item.qty + escapeHtml(item.单位 || '') + '</td>' +
-                '<td style="padding:8px 10px;border-bottom:1px solid #f0f0f0;font-size:14px;font-weight:700;color:#ff6b35;text-align:right;">¥' + (item.售价 * item.qty).toFixed(2) + '</td>' +
-                '</tr>';
+        var exportDate = new Date();
+        var dateText = exportDate.getFullYear() + '.' +
+            String(exportDate.getMonth() + 1).padStart(2, '0') + '.' +
+            String(exportDate.getDate()).padStart(2, '0');
+        var brandGreen = '#00967b';
+        var brandGreenDark = '#00745f';
+        var brandGreenSoft = '#e8f6f2';
+        var pageBg = '#f0f2f5';
+        var paperBg = '#ffffff';
+        var softBg = '#f7f8fa';
+        var lineColor = '#e5e7eb';
+
+        var grouped = [];
+        selected.forEach(function(item) {
+            var cat = item.分类 || '未分类';
+            var group = grouped.find(function(g) { return g.name === cat; });
+            if (!group) {
+                group = { name: cat, items: [] };
+                grouped.push(group);
+            }
+            group.items.push(item);
+        });
+
+        var rowsHtml = grouped.map(function(group) {
+            var itemRows = group.items.map(function(item) {
+                var qtyText = '×' + item.qty + escapeHtml(item.单位 || '');
+                return '<div style="display:grid;grid-template-columns:1fr 86px 118px 118px;align-items:center;min-height:44px;border-bottom:1px solid ' + lineColor + ';">' +
+                    '<div style="padding:10px 0 10px 4px;font-size:16px;font-weight:600;color:#111827;line-height:1.35;">' + escapeHtml(item.商品名称) + '</div>' +
+                    '<div style="padding:10px 0;font-size:14px;color:#6b7280;text-align:left;">' + qtyText + '</div>' +
+                    '<div style="padding:10px 0;font-size:15px;font-weight:700;color:#6b7280;text-align:left;">¥' + (item.成本 * item.qty).toFixed(2) + '</div>' +
+                    '<div style="padding:10px 0;font-size:17px;font-weight:800;color:' + brandGreenDark + ';text-align:right;">¥' + (item.售价 * item.qty).toFixed(2) + '</div>' +
+                '</div>';
+            }).join('');
+            return '<section style="margin-top:18px;">' +
+                '<div style="height:38px;border-radius:10px;background:' + brandGreenSoft + ';display:flex;align-items:center;justify-content:space-between;padding:0 14px;border:1px solid #cce9e2;">' +
+                    '<div style="font-size:16px;font-weight:800;color:' + brandGreenDark + ';">' + escapeHtml(group.name) + '</div>' +
+                    '<div style="font-size:13px;color:#4b8075;">' + group.items.length + ' 项</div>' +
+                '</div>' +
+                '<div style="padding:2px 10px 0;">' + itemRows + '</div>' +
+            '</section>';
         }).join('');
 
         // 构建导出专用DOM
         var wrapper = document.createElement('div');
-        wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;width:600px;background:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;';
+        wrapper.style.cssText = 'position:fixed;left:-9999px;top:0;width:720px;background:' + pageBg + ';padding:28px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;';
         wrapper.innerHTML =
-            '<div style="padding:28px 24px 20px;">' +
-                '<div style="font-size:11px;color:#999;letter-spacing:1px;margin-bottom:6px;">套餐配置方案</div>' +
-                '<div style="font-size:22px;font-weight:700;color:#1a1a1a;margin-bottom:16px;padding-bottom:12px;border-bottom:2px solid #ff6b35;">' + escapeHtml(pkgName) + '</div>' +
-            '</div>' +
-            '<div style="padding:0 24px 16px;">' +
-                '<div style="display:flex;background:#fff8f3;border-radius:10px;padding:14px 0;gap:0;">' +
-                    '<div style="flex:1;text-align:center;"><div style="font-size:11px;color:#999;margin-bottom:4px;">套餐定价</div><div style="font-size:14px;font-weight:600;color:#1a1a1a;">' + (groupPrice ? '¥' + groupPrice : '选填') + '</div></div>' +
-                    '<div style="flex:1;text-align:center;border-left:1px solid #f0e0d0;"><div style="font-size:11px;color:#999;margin-bottom:4px;">总价</div><div style="font-size:14px;font-weight:700;color:#1a1a1a;">¥' + resOri + '</div></div>' +
-                    '<div style="flex:1;text-align:center;border-left:1px solid #f0e0d0;"><div style="font-size:11px;color:#999;margin-bottom:4px;">折扣率</div><div style="font-size:14px;font-weight:600;color:#4A7CFF;">' + resDisc + '</div></div>' +
-                    '<div style="flex:1;text-align:center;border-left:1px solid #f0e0d0;"><div style="font-size:11px;color:#999;margin-bottom:4px;">成本</div><div style="font-size:14px;font-weight:600;color:#1a1a1a;">¥' + resCost + '</div></div>' +
-                    '<div style="flex:1;text-align:center;border-left:1px solid #f0e0d0;"><div style="font-size:11px;color:#999;margin-bottom:4px;">毛利率</div><div style="font-size:14px;font-weight:700;color:#52c41a;">' + resRate + '</div></div>' +
+            '<div style="background:' + paperBg + ';border:1px solid ' + lineColor + ';border-radius:18px;overflow:hidden;box-shadow:0 12px 36px rgba(15,23,42,.10);">' +
+                '<div style="background:#ffffff;padding:26px 30px 22px;border-bottom:1px solid ' + lineColor + ';">' +
+                    '<div style="display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:18px;">' +
+                        '<img src="yangfang-logo.png" style="width:76px;height:76px;object-fit:contain;" alt="阳坊涮肉">' +
+                        '<div style="min-width:0;">' +
+                            '<div style="display:inline-block;font-size:30px;font-weight:900;line-height:1.18;letter-spacing:0;color:#111827;word-break:break-word;padding-bottom:8px;border-bottom:4px solid ' + brandGreen + ';">' + escapeHtml(pkgName) + '</div>' +
+                        '</div>' +
+                        '<div style="text-align:right;flex-shrink:0;">' +
+                            '<div style="font-size:13px;color:#6b7280;">' + dateText + '</div>' +
+                            '<div style="margin-top:6px;font-size:13px;color:' + brandGreenDark + ';font-weight:800;">共 ' + selected.length + ' 道菜</div>' +
+                        '</div>' +
+                    '</div>' +
                 '</div>' +
-            '</div>' +
-            '<div style="padding:0 24px 16px;">' +
-                '<table style="width:100%;border-collapse:collapse;">' +
-                    '<thead><tr style="background:#f7f7f7;">' +
-                        '<th style="padding:8px 10px;font-size:12px;color:#999;font-weight:600;text-align:center;">序号</th>' +
-                        '<th style="padding:8px 10px;font-size:12px;color:#999;font-weight:600;text-align:center;">品类</th>' +
-                        '<th style="padding:8px 10px;font-size:12px;color:#999;font-weight:600;text-align:left;">菜品名</th>' +
-                        '<th style="padding:8px 10px;font-size:12px;color:#999;font-weight:600;text-align:right;">成本</th>' +
-                        '<th style="padding:8px 10px;font-size:12px;color:#999;font-weight:600;text-align:center;">单位</th>' +
-                        '<th style="padding:8px 10px;font-size:12px;color:#999;font-weight:600;text-align:right;">价格</th>' +
-                    '</tr></thead>' +
-                    '<tbody>' + rowsHtml + '</tbody>' +
-                '</table>' +
-            '</div>' +
-            (remark ? '<div style="padding:0 24px 24px;">' +
-                '<div style="font-size:12px;color:#999;font-weight:600;margin-bottom:6px;">备注</div>' +
-                '<div style="font-size:13px;color:#666;line-height:1.6;padding:10px 12px;background:#f9f9f9;border-radius:8px;white-space:pre-wrap;">' + escapeHtml(remark) + '</div>' +
-            '</div>' : '<div style="height:24px;"></div>');
+                '<div style="padding:24px 30px 28px;">' +
+                    '<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:10px;">' +
+                        '<div style="background:' + brandGreenSoft + ';border:1px solid #cce9e2;border-radius:14px;padding:13px 10px;"><div style="font-size:12px;color:#4b8075;margin-bottom:7px;">套餐定价</div><div style="font-size:20px;font-weight:900;color:' + brandGreenDark + ';">' + (groupPrice ? '¥' + escapeHtml(groupPrice) : '选填') + '</div></div>' +
+                        '<div style="background:' + softBg + ';border:1px solid ' + lineColor + ';border-radius:14px;padding:13px 10px;"><div style="font-size:12px;color:#6b7280;margin-bottom:7px;">门店原价</div><div style="font-size:20px;font-weight:900;color:#111827;">¥' + escapeHtml(resOri) + '</div></div>' +
+                        '<div style="background:' + softBg + ';border:1px solid ' + lineColor + ';border-radius:14px;padding:13px 10px;"><div style="font-size:12px;color:#6b7280;margin-bottom:7px;">折扣率</div><div style="font-size:20px;font-weight:900;color:' + brandGreenDark + ';">' + escapeHtml(resDisc) + '</div></div>' +
+                        '<div style="background:' + softBg + ';border:1px solid ' + lineColor + ';border-radius:14px;padding:13px 10px;"><div style="font-size:12px;color:#6b7280;margin-bottom:7px;">合计成本</div><div style="font-size:20px;font-weight:900;color:#111827;">¥' + escapeHtml(resCost) + '</div></div>' +
+                        '<div style="background:' + softBg + ';border:1px solid ' + lineColor + ';border-radius:14px;padding:13px 10px;"><div style="font-size:12px;color:#6b7280;margin-bottom:7px;">毛利率</div><div style="font-size:20px;font-weight:900;color:#b45309;">' + escapeHtml(resRate) + '</div></div>' +
+                    '</div>' +
+                    '<div style="display:grid;grid-template-columns:1fr 86px 118px 118px;align-items:end;margin-top:24px;padding:0 10px 10px;border-bottom:3px solid ' + brandGreen + ';font-size:21px;font-weight:900;color:#111827;">' +
+                        '<div style="padding-left:4px;text-align:left;">菜品明细</div>' +
+                        '<div style="text-align:left;">单位</div>' +
+                        '<div style="text-align:left;">成本</div>' +
+                        '<div style="text-align:right;">价格</div>' +
+                    '</div>' +
+                    rowsHtml +
+                    (remark ? '<div style="margin-top:22px;background:' + softBg + ';border:1px solid ' + lineColor + ';border-radius:14px;padding:15px 16px;">' +
+                        '<div style="font-size:14px;color:' + brandGreenDark + ';font-weight:900;margin-bottom:8px;">备注</div>' +
+                        '<div style="font-size:14px;color:#374151;line-height:1.7;white-space:pre-wrap;">' + escapeHtml(remark) + '</div>' +
+                    '</div>' : '') +
+                    '<div style="margin-top:24px;border-top:1px solid ' + lineColor + ';padding-top:14px;display:flex;justify-content:space-between;font-size:12px;color:#6b7280;">' +
+                        '<span>阳坊涮肉菜品知识库生成</span><span>金额单位：元</span>' +
+                    '</div>' +
+                '</div>' +
+            '</div>';
 
         document.body.appendChild(wrapper);
         showToast('正在生成长图…');
@@ -4589,7 +4630,7 @@
         html2canvas(wrapper, {
             scale: 2,
             useCORS: true,
-            backgroundColor: '#ffffff',
+            backgroundColor: pageBg,
             logging: false
         }).then(function(canvas) {
             document.body.removeChild(wrapper);
