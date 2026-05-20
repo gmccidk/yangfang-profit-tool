@@ -115,161 +115,71 @@
         .lib-select:hover { border-color: var(--border-strong); }
         .lib-select:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); background: var(--surface); }
 
-        /* ===== 内联展开列表（PC端表格切换） ===== */
-        .lib-inline-switch {
-            position: relative;
-            min-width: 168px;
-            max-width: 280px;
-        }
-        .lib-inline-trigger {
+        /* ===== 菜单管理入口与弹窗 ===== */
+        .menu-current-pill {
             display: flex;
             align-items: center;
             justify-content: space-between;
+            min-width: 168px;
+            max-width: 280px;
             padding: 7px 10px;
             border: 1px solid var(--border);
             border-radius: var(--radius-sm);
             background: var(--surface-muted);
-            cursor: pointer;
-            transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-            user-select: none;
-        }
-        .lib-inline-trigger:hover {
-            border-color: var(--border-strong);
-            background: var(--surface);
-        }
-        .lib-inline-trigger.open {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px var(--primary-ring);
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            background: var(--surface);
-        }
-        .lib-inline-value {
-            font-size: 13px;
-            color: var(--text);
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            flex: 1;
-        }
-        .lib-inline-arrow {
-            font-size: 10px;
-            color: var(--text-secondary);
-            margin-left: 8px;
-            transition: transform 0.2s;
-            flex-shrink: 0;
-        }
-        .lib-inline-trigger.open .lib-inline-arrow {
-            transform: rotate(180deg);
-        }
-        .lib-inline-dropdown {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: var(--surface);
-            border: 1px solid var(--primary);
-            border-top: none;
-            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            z-index: 100;
-            display: none;
-            flex-direction: column;
-            max-height: 320px;
-        }
-        .lib-inline-dropdown.open {
-            display: flex;
-            animation: libInlineSlideDown 0.15s ease-out;
-        }
-        @keyframes libInlineSlideDown {
-            from { opacity: 0; transform: translateY(-4px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .lib-inline-search {
-            padding: 6px 8px;
-            border-bottom: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-        .lib-inline-search input {
-            width: 100%;
-            padding: 5px 8px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            font-size: 12px;
-            outline: none;
-            background: var(--surface-muted);
-            color: var(--text);
             box-sizing: border-box;
         }
-        .lib-inline-search input:focus {
-            border-color: var(--primary);
-            background: var(--surface);
-        }
-        .lib-inline-list {
-            overflow-y: auto;
-            flex: 1;
-            padding: 4px 0;
-        }
-        .lib-inline-item {
-            display: flex;
-            align-items: center;
-            padding: 8px 12px;
-            cursor: pointer;
+        .menu-current-pill span {
             font-size: 13px;
             color: var(--text);
-            transition: background 0.1s;
-            gap: 8px;
-        }
-        .lib-inline-item:hover {
-            background: var(--surface-muted);
-        }
-        .lib-inline-item.active {
-            background: var(--primary);
-            color: #fff;
-            font-weight: 600;
-        }
-        .lib-inline-item.active:hover {
-            background: var(--primary);
-            filter: brightness(0.95);
-        }
-        .lib-inline-item .lib-item-check {
-            width: 16px;
-            text-align: center;
-            flex-shrink: 0;
-            font-size: 12px;
-        }
-        .lib-inline-item .lib-item-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             flex: 1;
+        }
+        .menu-manager-content { max-width: 720px; height: min(82vh, 680px); padding: 0; overflow: hidden; display: flex; flex-direction: column; }
+        .menu-manager-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 18px 22px; border-bottom: 1px solid var(--border); }
+        .menu-manager-head h3 { margin: 0; color: var(--text); font-size: 18px; }
+        .menu-manager-head p { margin: 5px 0 0; color: var(--text-muted); font-size: 12px; line-height: 1.45; }
+        .menu-manager-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 14px 22px; border-bottom: 1px solid var(--border); background: #fafbfc; }
+        .menu-manager-search { flex: 1 1 220px; min-width: 180px; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px; background: var(--surface); color: var(--text); }
+        .menu-manager-search:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); outline: none; }
+        .menu-manager-list { flex: 1; overflow-y: auto; padding: 12px 22px 18px; background: #f6f8fb; }
+        .menu-manager-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+        }
+        .menu-manager-row.is-active { border-color: #93c5fd; background: #f8fbff; box-shadow: inset 4px 0 0 var(--primary); }
+        .menu-manager-main { min-width: 0; }
+        .menu-manager-name { display: flex; align-items: center; gap: 8px; color: var(--text); font-weight: 700; min-width: 0; }
+        .menu-manager-name span:first-child {
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
-        .lib-inline-footer {
-            padding: 6px 8px;
-            border-top: 1px solid var(--border);
-            flex-shrink: 0;
-        }
-        .lib-inline-add {
-            width: 100%;
-            padding: 6px 8px;
-            border: 1px dashed var(--border-strong);
-            border-radius: var(--radius-sm);
-            background: none;
-            color: var(--primary);
-            font-size: 12px;
-            cursor: pointer;
-            transition: background 0.15s, border-color 0.15s;
-        }
-        .lib-inline-add:hover {
-            background: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-        .lib-inline-empty {
-            padding: 16px 12px;
+        .menu-manager-active-badge { flex-shrink: 0; padding: 2px 7px; border-radius: 999px; background: var(--primary); color: #fff; font-size: 11px; font-weight: 700; }
+        .menu-manager-meta { margin-top: 5px; color: var(--text-muted); font-size: 12px; }
+        .menu-manager-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
+        .menu-manager-empty {
+            padding: 28px 12px;
             text-align: center;
             color: var(--text-secondary);
-            font-size: 12px;
+            font-size: 13px;
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            border-radius: 10px;
+        }
+        @media (max-width: 640px) {
+            .menu-manager-row { grid-template-columns: 1fr; }
+            .menu-manager-actions { justify-content: flex-start; }
+            .menu-current-pill { max-width: 220px; }
         }
         .app-container { display: flex; flex: 1; min-height: 0; align-items: stretch; position: relative; gap: 0; }
         .panel {
@@ -469,7 +379,15 @@
         .dish-unit-inline { color: var(--text-muted); font-size: 11px; font-weight: 500; }
         .dish-qty-val { width: 28px; text-align: center; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text); font-size: 14px; display: inline-block; }
 
-        .modal-content.dish-detail-modal { max-width: 640px; height: auto; max-height: 92vh; padding: 0; border: 1px solid var(--border); }
+        .modal-content.dish-detail-modal {
+            max-width: 640px;
+            height: auto;
+            max-height: 92vh;
+            padding: 0;
+            border: 1px solid var(--border);
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
         .dish-detail-head {
             padding: 18px 22px;
             border-bottom: 1px solid var(--border);
@@ -481,6 +399,47 @@
         }
         .dish-detail-head h3 { margin: 0; font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.02em; }
         .dish-detail-head p { margin: 6px 0 0; font-size: 12px; color: var(--text-muted); line-height: 1.45; }
+        .dish-detail-view { padding: 0; }
+        .dish-detail-hero { display: flex; flex-direction: column; gap: 18px; padding: 22px; background: linear-gradient(135deg, #f8fafc 0%, #fff 55%, #f6fbff 100%); }
+        .dish-detail-hero-media { border-radius: 12px; overflow: hidden; display: flex; align-items: center; justify-content: center; align-self: center; max-width: 100%; }
+        .dish-detail-hero-media.has-image { border: 1px solid #e8eaef; background: transparent; }
+        .dish-detail-hero-media:not(.has-image) { width: 100%; min-height: 240px; border: 1px solid #e8eaef; background: #f3f6fa; }
+        .dish-detail-view-img { display: none; width: auto; height: auto; max-width: 100%; max-height: min(58vh, 520px); object-fit: contain; cursor: zoom-in; background: transparent; }
+        .dish-detail-view-ph { color: #a0a7b3; font-size: 14px; text-align: center; padding: 20px; }
+        .dish-detail-view-main { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(160px, 0.8fr); gap: 12px; min-width: 0; align-items: stretch; }
+        .dish-detail-info-card,
+        .dish-detail-price-card { padding: 14px 16px; border-radius: 10px; border: 1px solid var(--border); background: #fff; }
+        .dish-detail-title-row { display: flex; flex-direction: column; gap: 8px; }
+        .dish-detail-title { margin: 0; font-size: 22px; line-height: 1.25; font-weight: 800; color: var(--text); letter-spacing: 0; word-break: break-word; }
+        .dish-detail-meta-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+        .dish-detail-pill { display: inline-flex; align-items: center; min-height: 24px; padding: 3px 10px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: 12px; font-weight: 700; }
+        .dish-detail-pill-muted { background: #f3f4f6; color: var(--text-secondary); }
+        .dish-detail-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; height: 100%; align-items: center; }
+        .dish-detail-stat { padding: 0; }
+        .dish-detail-stat + .dish-detail-stat { border-left: 1px solid var(--border); padding-left: 10px; }
+        .dish-detail-stat span { display: block; margin-bottom: 5px; font-size: 12px; color: var(--text-muted); font-weight: 600; }
+        .dish-detail-stat strong { font-size: 18px; color: var(--text); font-variant-numeric: tabular-nums; }
+        .dish-detail-stat-price strong { color: var(--accent-price); }
+        .dish-detail-intro { padding: 0 22px 22px; }
+        .dish-detail-intro h4 { margin: 0 0 8px; font-size: 14px; color: var(--text); }
+        .dish-detail-intro-box { min-height: 72px; padding: 14px 16px; border-radius: 10px; border: 1px solid var(--border); background: #fff; color: var(--text-secondary); line-height: 1.65; word-break: break-word; }
+        .dish-detail-intro-box p { margin: 0 0 10px; }
+        .dish-detail-intro-box p:last-child { margin-bottom: 0; }
+        .dish-detail-intro-box h1,
+        .dish-detail-intro-box h2,
+        .dish-detail-intro-box h3 { margin: 10px 0 6px; color: var(--text); line-height: 1.35; letter-spacing: 0; }
+        .dish-detail-intro-box h1 { font-size: 18px; }
+        .dish-detail-intro-box h2 { font-size: 16px; }
+        .dish-detail-intro-box h3 { font-size: 14px; }
+        .dish-detail-intro-box ul,
+        .dish-detail-intro-box ol { margin: 0 0 10px 20px; padding: 0; }
+        .dish-detail-intro-box li { margin: 3px 0; }
+        .dish-detail-intro-box a { color: var(--primary); text-decoration: underline; text-underline-offset: 2px; }
+        .dish-detail-intro-box code { padding: 1px 5px; border-radius: 4px; background: #f3f4f6; color: var(--text); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; font-size: 0.92em; }
+        .dish-detail-intro-box blockquote { margin: 0 0 10px; padding: 6px 10px; border-left: 3px solid #bfdbfe; background: #f8fbff; color: var(--text-secondary); border-radius: 6px; }
+        .dish-detail-intro-empty { color: #a0a7b3; }
+        .dish-detail-edit { display: none; }
+        .dish-detail-edit.is-open { display: block; }
         .dish-detail-body { padding: 16px 20px; display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: start; }
         .dish-detail-preview { width: 120px; height: 120px; border-radius: 10px; object-fit: cover; background: #f5f5f5; border: 1px solid #e8eaef; display: block; }
         .dish-detail-preview.dish-detail-preview--zoom { cursor: zoom-in; }
@@ -567,11 +526,18 @@
         }
         .dish-detail-fields textarea { min-height: 72px; resize: vertical; }
         .dish-detail-fields .dish-detail-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        @media (max-width: 640px) {
+            .dish-detail-view-img { max-height: min(52vh, 420px); }
+            .dish-detail-hero-media:not(.has-image) { min-height: 220px; }
+            .dish-detail-view-main { grid-template-columns: 1fr; }
+            .dish-detail-title { font-size: 22px; }
+        }
         @media (max-width: 560px) {
             .dish-detail-body { grid-template-columns: 1fr; }
             .dish-detail-fields .dish-detail-row2 { grid-template-columns: 1fr; }
         }
-        .dish-detail-sync-block { padding: 14px 22px 18px; border-top: 1px dashed var(--border); background: linear-gradient(180deg, #f8f5ff 0%, #fafbfd 100%); }
+        .dish-detail-sync-block { display: none; padding: 14px 22px 18px; border-top: 1px dashed var(--border); background: linear-gradient(180deg, #f8f5ff 0%, #fafbfd 100%); }
+        .dish-detail-sync-block.is-open { display: block; }
         .dish-detail-sync-block h4 { margin: 0 0 8px; font-size: 13px; font-weight: 600; color: #531dab; }
         .dish-detail-sync-fld-toolbar { margin-bottom: 8px; }
         .dish-detail-field-cbs { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-bottom: 10px; font-size: 12px; color: #444; }
@@ -881,7 +847,7 @@
             flex-shrink: 0;
         }
         .admin-modal-title { margin: 0; font-size: 18px; font-weight: 600; color: #1a1a2e; letter-spacing: -0.02em; }
-        .admin-modal-body { padding: 16px 22px 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0; overflow: hidden; }
+        .admin-modal-body { padding: 16px 22px 22px; display: flex; flex-direction: column; gap: 14px; flex: 1; min-height: 0; overflow-y: auto; }
         .admin-add-card { background: linear-gradient(135deg, #f0f7ff 0%, #fafbff 50%, #fff 100%); border: 1px solid #d6e4ff; border-radius: 10px; padding: 14px 16px; flex-shrink: 0; }
         .admin-add-card__head { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
         .admin-add-card__badge { display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; border-radius: 8px; background: var(--primary); color: #fff; font-size: 16px; font-weight: 600; line-height: 1; }
@@ -891,6 +857,29 @@
         .admin-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
         .admin-input--search { width: 100%; padding: 10px 12px; border-radius: 10px; background: #fafbfc; }
         .admin-input--search:focus { background: #fff; }
+        .add-dish-form { display: flex; flex-direction: column; gap: 14px; }
+        .add-dish-section { display: flex; flex-direction: column; gap: 8px; }
+        .add-dish-label { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+        .add-dish-category-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+        .add-dish-radio {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 10px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: #fff;
+            font-size: 13px;
+            color: var(--text);
+            cursor: pointer;
+        }
+        .add-dish-radio:hover { border-color: var(--primary); background: var(--primary-soft); }
+        .add-dish-radio input { margin: 0; }
+        .add-dish-grid { display: grid; grid-template-columns: 1.4fr 0.7fr 0.7fr 0.7fr; gap: 10px; }
+        .add-dish-grid-full { display: grid; grid-template-columns: 1fr; gap: 10px; }
+        .add-dish-grid textarea { min-height: 86px; resize: vertical; }
+        .add-dish-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; padding-top: 4px; }
+        @media (max-width: 720px) { .add-dish-grid { grid-template-columns: 1fr; } }
         #addCat { width: 96px; flex: 0 0 auto; }
         #addName { flex: 1 1 180px; min-width: 140px; }
         #addUnit { width: 68px; flex: 0 0 auto; }
@@ -1003,13 +992,79 @@
         .history-item-meta { font-size: 11px; color: #888; }
         .history-stat-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; font-size: 12px; }
         .hist-stat { padding: 3px 8px; border-radius: 6px; background: #fff; border: 1px solid #e8e8e8; color: #555; }
+        .hist-stat.hist-stat--changed { background: #fffaf0; border-color: #f7c97f; box-shadow: inset 0 0 0 1px rgba(217, 119, 6, 0.12); }
         .hist-stat b { color: var(--primary); font-weight: 600; }
         .hist-stat--gp b { color: var(--accent-price); font-weight: 700; }
         .hist-stat--rate b { color: var(--success); }
         .hist-stat--rate.hist-stat--low b { color: var(--danger); }
         .history-item-remark { font-size: 12px; color: #666; line-height: 1.45; margin: 4px 0 6px; padding: 6px 8px; background: #fafafa; border-radius: 6px; border-left: 3px solid #d9d9d9; word-break: break-word; max-height: 64px; overflow-y: auto; }
         .history-item-lines { color: #555; line-height: 1.4; word-break: break-all; margin: 6px 0; max-height: 72px; overflow: hidden; }
+        .history-item-lines.history-item-lines--changed { padding: 7px 8px; background: #fffaf0; border: 1px solid #f7c97f; border-radius: 6px; }
         .history-item-actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+        .history-title-changed { display: inline-flex; align-items: center; padding: 2px 7px; border-radius: 6px; background: #fffaf0; border: 1px solid #f7c97f; }
+        .history-diff-summary { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 6px; padding: 8px; border: 1px solid #fed7aa; border-radius: 8px; background: #fffaf5; }
+        .history-diff-summary__label { font-size: 12px; color: #9a3412; font-weight: 700; }
+        .history-diff-chip { display: inline-flex; align-items: center; max-width: 100%; padding: 3px 8px; border-radius: 999px; background: #fff; border: 1px solid #fed7aa; color: #9a3412; font-size: 11px; font-weight: 600; line-height: 1.35; word-break: break-word; }
+        .history-diff-chip--long { border-radius: 7px; white-space: normal; }
+        .history-diff-chip--items { background: #ecfeff; border-color: #a5f3fc; color: #0e7490; }
+        .history-diff-chip--metric { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+        .history-version-links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 6px; padding-top: 8px; border-top: 1px dashed #e5e7eb; font-size: 12px; color: var(--text-muted); }
+        .history-version-links span { font-weight: 600; color: #64748b; }
+        .history-version-links button { border: 1px solid #cbd5e1; background: #f8fafc; color: #1d4ed8; border-radius: 6px; padding: 4px 8px; font: inherit; cursor: pointer; }
+        .history-version-links button:hover { border-color: #93c5fd; background: #eff6ff; }
+        .history-board {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            scroll-snap-type: x proximity;
+        }
+        .history-board-column {
+            flex: 0 0 calc((100% - 32px) / 3);
+            min-width: 300px;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            background: var(--surface);
+            box-shadow: var(--shadow-sm);
+            scroll-snap-align: start;
+        }
+        .history-board-column.sortable-ghost { opacity: 0.45; }
+        .history-board-column-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--border);
+            background: linear-gradient(180deg, #f8fafc 0%, #fff 100%);
+            cursor: grab;
+        }
+        .history-board-column-head:active { cursor: grabbing; }
+        .history-board-column-title { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+        .history-board-column-title strong { font-size: 14px; color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .history-board-column-title span { font-size: 12px; color: var(--text-muted); }
+        .history-board-column-count { flex-shrink: 0; padding: 2px 8px; border-radius: 999px; background: var(--primary-soft); color: var(--primary); font-size: 12px; font-weight: 700; }
+        .history-board-card-list {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            padding: 10px;
+        }
+        .history-board .history-item {
+            margin-bottom: 10px;
+            background: #fff;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+        }
+        @media (max-width: 980px) {
+            .history-board-column { flex-basis: min(86vw, 420px); }
+        }
         .history-hint { font-size: 12px; color: #888; margin-bottom: 8px; }
         .hist-field-block { margin: 6px 0; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
         .hist-field-block label { font-size: 11px; color: var(--text-secondary); font-weight: 600; }
@@ -1061,8 +1116,8 @@
         .app-sheet-box input[type="text"] { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; box-sizing: border-box; margin-bottom: 14px; }
         .app-sheet-actions { display: flex; justify-content: flex-end; gap: 8px; }
 
-        /* ===== 移动端适配 (max-width: 1024px) ===== */
-        @media (max-width: 1024px) {
+        /* ===== 移动端适配：窄屏触控设备 ===== */
+        @media (max-width: 1024px) and (hover: none) and (pointer: coarse) {
             /* --- 汉堡菜单按钮（仅移动端显示） --- */
             .mobile-hamburger {
                 display: flex !important;
@@ -2501,6 +2556,7 @@
         .page-header h2 { margin: 0; font-size: 18px; font-weight: 600; color: var(--text); }
         .page-header-right { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
         .page-body { flex: 1; overflow-y: auto; padding: 20px; }
+        #historyPageContainer.page-body { padding: 0; overflow: hidden; }
         /* 库管理页面内容区 */
         .admin-page-content { display: flex; flex-direction: column; gap: 16px; max-width: 1200px; margin: 0 auto; width: 100%; }
         .admin-page-section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; }
@@ -2515,23 +2571,93 @@
 
         /* ===== 用户信息栏 ===== */
         .user-bar {
+            position: relative;
             display: flex; align-items: center; gap: 8px;
             font-size: 13px; color: var(--text-secondary);
             margin-left: auto; flex-shrink: 0;
         }
-        .user-bar .user-name { font-weight: 600; color: var(--text); }
-        .user-bar button {
-            padding: 5px 10px; border: 1px solid var(--border);
-            border-radius: var(--radius-sm); background: var(--surface-muted);
-            font-size: 12px; cursor: pointer; color: var(--text-secondary);
-            transition: background 0.15s, border-color 0.15s, color 0.15s;
-            white-space: nowrap;
+        .user-profile-trigger {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 38px;
+            padding: 4px 8px 4px 5px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            background: var(--surface-muted);
+            color: var(--text);
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
         }
-        .user-bar button:hover { border-color: var(--border-strong); color: var(--text); background: var(--surface); }
-        .user-bar .btn-admin { color: var(--primary); border-color: rgba(29,99,216,0.3); }
-        .user-bar .btn-admin:hover { background: var(--primary-soft); }
-        .user-bar .btn-logout { color: var(--danger); border-color: rgba(220,38,38,0.25); }
-        .user-bar .btn-logout:hover { background: rgba(220,38,38,0.06); }
+        .user-profile-trigger:hover,
+        .user-profile-trigger.is-open {
+            background: var(--surface);
+            border-color: #93c5fd;
+            box-shadow: 0 0 0 3px var(--primary-ring);
+        }
+        .user-avatar {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--primary);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+        .user-name {
+            max-width: 120px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .user-profile-arrow { color: var(--text-muted); font-size: 11px; transition: transform 0.15s; }
+        .user-profile-trigger.is-open .user-profile-arrow { transform: rotate(180deg); }
+        .user-profile-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: calc(100% + 8px);
+            width: 240px;
+            z-index: 500;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: var(--surface);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+        .user-profile-menu.is-open { display: block; animation: fadeIn 0.14s ease-out; }
+        .user-profile-summary { display: flex; gap: 10px; align-items: center; padding: 14px; border-bottom: 1px solid var(--border); background: #f8fafc; }
+        .user-profile-summary .user-avatar { width: 34px; height: 34px; font-size: 15px; }
+        .user-profile-info { min-width: 0; }
+        .user-profile-info strong { display: block; color: var(--text); font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .user-profile-info span { display: block; margin-top: 2px; color: var(--text-muted); font-size: 12px; }
+        .user-profile-actions { padding: 6px; }
+        .user-profile-actions button {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 10px;
+            border: none;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            font-family: inherit;
+        }
+        .user-profile-actions button:hover { background: var(--surface-muted); }
+        .user-profile-actions .btn-admin { color: var(--primary); }
+        .user-profile-actions .btn-logout { color: var(--danger); }
+        .user-profile-actions .btn-logout:hover { background: rgba(220,38,38,0.06); }
 
         /* ===== 管理后台弹窗 ===== */
         .admin-modal-overlay {
@@ -2934,26 +3060,11 @@
     <div class="header-row">
     <img class="header-logo" src="yangfang-logo.png" alt="阳坊涮肉 SINCE 1897" width="44" height="44">
     <div class="lib-bar">
-            <label>当前表格</label>
-            <div class="lib-inline-switch" id="libInlineSwitch">
-                <div class="lib-inline-trigger" id="libInlineTrigger" onclick="toggleLibInlineList()">
-                    <span class="lib-inline-value" id="libInlineValue">—</span>
-                    <span class="lib-inline-arrow" id="libInlineArrow">▼</span>
-                </div>
-                <div class="lib-inline-dropdown" id="libInlineDropdown">
-                    <div class="lib-inline-search">
-                        <input type="text" id="libInlineSearchInput" placeholder="搜索表格..." oninput="filterLibInlineList(this.value)">
-                    </div>
-                    <div class="lib-inline-list" id="libInlineList"></div>
-                    <div class="lib-inline-footer">
-                        <button type="button" class="lib-inline-add" onclick="createNewLibraryFromInline()">+ 新建表格</button>
-                    </div>
-                </div>
+            <div class="menu-current-pill" title="当前菜单">
+                <span id="menuCurrentName">—</span>
             </div>
+            <button type="button" class="btn-pkg btn-pkg-copy" onclick="toggleMenuManager(true)">管理菜单</button>
             <select id="librarySelect" class="lib-select" style="display:none;" title="切换不同 Excel 库，数据互不影响"></select>
-            <button type="button" class="btn-pkg btn-pkg-rename" onclick="renameCurrentLibrary()">重命名</button>
-            <button type="button" class="btn-pkg btn-pkg-clear" onclick="deleteCurrentLibrary()">删除此表</button>
-            <button type="button" class="btn-pkg btn-pkg-import" onclick="document.getElementById('fileIn').click()" title="首行表头；列含分类、名称、单位、售价、成本，成本列之后可为「菜品介绍」「菜品图片」列（或紧接成本后的两列）。WPS 单元格图片（=DISPIMG）会从 xlsx 内 cellimages 解析为图片。">导入Excel</button>
             <button type="button" class="btn-pkg btn-pkg-save" onclick="backupAllData()">备份数据</button>
             <button type="button" class="btn-pkg btn-pkg-import" onclick="document.getElementById('backupFileIn').click()">恢复数据</button>
             <button type="button" class="btn-pkg btn-pkg-copy" onclick="toggleHelpModal()">帮助</button>
@@ -2961,12 +3072,44 @@
             <input type="file" id="backupFileIn" style="display:none" accept=".json">
         </div>
     <div class="user-bar" id="userBar">
-        <span class="user-name" id="userDisplayName"></span>
-        <button type="button" class="btn-admin" id="btnAdminPanel" style="display:none" onclick="toggleAdminUserModal(true)">管理后台</button>
-        <button type="button" onclick="toggleChangePwModal(true)">修改密码</button>
-        <button type="button" class="btn-logout" onclick="logout()">退出登录</button>
-        <button type="button" class="mobile-preview-toggle" id="mobilePreviewBtn" onclick="toggleMobilePreview()"><span class="preview-icon">📱</span> 移动端预览</button>
+        <button type="button" class="user-profile-trigger" id="userProfileTrigger" onclick="toggleUserProfileMenu(event)" aria-haspopup="true" aria-expanded="false">
+            <span class="user-avatar" id="userAvatar">U</span>
+            <span class="user-name" id="userDisplayName"></span>
+            <span class="user-profile-arrow">▼</span>
+        </button>
+        <div class="user-profile-menu" id="userProfileMenu" role="menu">
+            <div class="user-profile-summary">
+                <span class="user-avatar" id="userMenuAvatar">U</span>
+                <div class="user-profile-info">
+                    <strong id="userMenuName">用户</strong>
+                    <span id="userMenuRole">普通用户</span>
+                </div>
+            </div>
+            <div class="user-profile-actions">
+                <button type="button" class="btn-admin" id="btnAdminPanel" style="display:none" onclick="closeUserProfileMenu(); toggleAdminUserModal(true)">管理后台 <span>›</span></button>
+                <button type="button" onclick="closeUserProfileMenu(); toggleChangePwModal(true)">修改密码 <span>›</span></button>
+                <button type="button" class="btn-logout" onclick="closeUserProfileMenu(); logout()">退出登录 <span>›</span></button>
+            </div>
+        </div>
     </div>
+    </div>
+</div>
+
+<div id="menuManagerModal" class="modal" aria-hidden="true" onclick="if (event.target === this) toggleMenuManager(false)">
+    <div class="modal-content menu-manager-content" onclick="event.stopPropagation()">
+        <div class="menu-manager-head">
+            <div>
+                <h3>菜单管理</h3>
+                <p>在这里切换不同菜单，也可以导入新菜单、重命名或删除当前已有菜单。</p>
+            </div>
+            <button type="button" class="btn-action" onclick="toggleMenuManager(false)">关闭</button>
+        </div>
+        <div class="menu-manager-tools">
+            <input type="text" id="menuManagerSearch" class="menu-manager-search" placeholder="搜索菜单..." oninput="renderMenuManagerList(this.value)">
+            <button type="button" class="btn-pkg btn-pkg-import" onclick="document.getElementById('fileIn').click()">导入新菜单</button>
+            <input type="file" id="menuManagerUpdateExcelIn" accept=".xlsx,.xls" style="display:none">
+        </div>
+        <div id="menuManagerList" class="menu-manager-list"></div>
     </div>
 </div>
 
@@ -2978,7 +3121,7 @@
         <div class="toolbar">
             <div style="display:flex; gap:5px;">
                 <input type="text" id="searchInput" class="search-input" style="flex:1" placeholder="搜索菜名/分类..." oninput="onSearch()">
-                <button type="button" class="btn-action btn-primary" onclick="toggleAdmin(true)">库管理</button>
+                <button type="button" class="btn-action btn-primary" onclick="toggleAdmin(true)">新增菜品</button>
             </div>
             <div class="sort-bar">
                 <div id="modeBtn" class="mode-toggle" onclick="toggleViewMode()">视图: 分类显示</div>
@@ -3080,10 +3223,6 @@
         <label>当前表格</label>
         <select id="mobileLibrarySelect" onchange="document.getElementById('librarySelect').value=this.value; document.getElementById('librarySelect').dispatchEvent(new Event('change'))"></select>
     </div>
-    <div class="mobile-menu-divider"></div>
-    <button type="button" class="mobile-menu-item" onclick="document.getElementById('fileIn').click(); toggleMobileMenu();">
-        <span class="menu-icon">📄</span> 导入Excel
-    </button>
     <button type="button" class="mobile-menu-item" onclick="backupAllData(); toggleMobileMenu();">
         <span class="menu-icon">💾</span> 备份数据
     </button>
@@ -3129,89 +3268,62 @@
     <div class="modal-content admin-modal">
         <div class="admin-modal-header">
             <div>
-                <h3 class="admin-modal-title">菜品库管理</h3>
+                <h3 class="admin-modal-title">新增菜品</h3>
             </div>
             <button type="button" class="btn-pkg btn-pkg-copy" onclick="toggleAdmin(false)">关闭</button>
         </div>
         <div class="admin-modal-body">
-            <div class="admin-add-card">
-                <div class="admin-add-card__head">
-                    <span class="admin-add-card__badge" aria-hidden="true">+</span>
-                    <span class="admin-add-card__label">新增菜品</span>
+            <div class="add-dish-form">
+                <div class="add-dish-section">
+                    <div class="add-dish-label">品类</div>
+                    <div id="addCategoryOptions" class="add-dish-category-grid"></div>
+                    <input type="text" id="addCatCustom" class="admin-input" placeholder="新增品类名称" autocomplete="off" style="display:none;max-width:260px;">
                 </div>
-                <div class="admin-add-row">
-                    <input type="text" id="addCat" class="admin-input" placeholder="分类" autocomplete="off">
-                    <input type="text" id="addName" class="admin-input" placeholder="菜品名称" autocomplete="off">
-                    <input type="text" id="addUnit" class="admin-input" placeholder="单位" autocomplete="off">
-                    <input type="number" id="addPrice" class="admin-input" placeholder="售价" step="any">
-                    <input type="number" id="addCost" class="admin-input" placeholder="成本" step="any">
+                <div class="add-dish-grid">
+                    <div>
+                        <label class="add-dish-label" for="addName">菜品名称</label>
+                        <input type="text" id="addName" class="admin-input" autocomplete="off" style="width:100%;">
+                    </div>
+                    <div>
+                        <label class="add-dish-label" for="addUnit">单位</label>
+                        <input type="text" id="addUnit" class="admin-input" autocomplete="off" style="width:100%;">
+                    </div>
+                    <div>
+                        <label class="add-dish-label" for="addPrice">售价</label>
+                        <input type="number" id="addPrice" class="admin-input" step="any" style="width:100%;">
+                    </div>
+                    <div>
+                        <label class="add-dish-label" for="addCost">成本</label>
+                        <input type="number" id="addCost" class="admin-input" step="any" style="width:100%;">
+                    </div>
+                </div>
+                <div class="add-dish-grid-full">
+                    <div>
+                        <label class="add-dish-label" for="addIntro">菜品介绍</label>
+                        <textarea id="addIntro" class="admin-input" placeholder="口味、规格、卖点等…" style="width:100%;box-sizing:border-box;"></textarea>
+                    </div>
+                    <div>
+                        <label class="add-dish-label" for="addImg">菜品图片</label>
+                        <input type="text" id="addImg" class="admin-input" placeholder="图片 URL，或上传图片后自动填入" autocomplete="off" style="width:100%;box-sizing:border-box;margin-bottom:8px;">
+                        <input type="file" id="addImgFile" accept="image/*" onchange="addDishOnImageFile(this)">
+                    </div>
+                </div>
+                <div class="admin-sync-panel is-visible">
+                    <div class="admin-sync-panel__title">同步到其他菜单</div>
+                    <div class="admin-sync-toolbar">
+                        <label class="admin-sync-all"><input type="checkbox" id="addSyncSelectAll" onchange="addDishOnSyncSelectAll(this.checked)"> 全选</label>
+                    </div>
+                    <div id="addSyncCheckboxes" class="admin-sync-checkboxes"></div>
+                </div>
+                <div class="add-dish-actions">
+                    <button type="button" class="btn-pkg btn-pkg-import" onclick="document.getElementById('adminBatchExcelIn').click()">批量新增</button>
+                    <button type="button" class="btn-pkg btn-pkg-copy" onclick="toggleAdmin(false)">取消</button>
                     <button type="button" class="btn-pkg btn-pkg-save" onclick="addItem()">确认新增</button>
                 </div>
             </div>
-            <div class="admin-excel-row">
-                <div class="admin-add-card admin-batch-card">
-                    <div class="admin-add-card__head">
-                        <span class="admin-add-card__badge admin-batch-badge" aria-hidden="true">表</span>
-                        <span class="admin-add-card__label">批量新增（Excel）</span>
-                    </div>
-                    <div class="admin-add-row">
-                        <button type="button" class="btn-pkg btn-pkg-import" onclick="document.getElementById('adminBatchExcelIn').click()">选择 Excel 批量导入</button>
-                        <input type="file" id="adminBatchExcelIn" accept=".xlsx,.xls" style="display:none">
-                    </div>
-                </div>
-                <div class="admin-add-card admin-update-card">
-                    <div class="admin-add-card__head">
-                        <span class="admin-add-card__badge admin-update-badge" aria-hidden="true">更</span>
-                        <span class="admin-add-card__label">更新菜品（Excel）</span>
-                    </div>
-                    <div class="admin-add-row">
-                        <button type="button" class="btn-pkg btn-pkg-copy" onclick="document.getElementById('adminUpdateExcelIn').click()">选择 Excel 更新菜品</button>
-                        <input type="file" id="adminUpdateExcelIn" accept=".xlsx,.xls" style="display:none">
-                    </div>
-                </div>
-                <div class="admin-add-card" style="background: linear-gradient(135deg, #f0f7ff 0%, #fafbff 50%, #fff 100%); border-color: #d6e4ff;">
-                    <div class="admin-add-card__head">
-                        <span class="admin-add-card__badge" style="background: #6366f1;">批</span>
-                        <span class="admin-add-card__label" style="color: #4f46e5;">批量操作</span>
-                    </div>
-                    <div class="admin-add-row">
-                        <button type="button" class="btn-pkg btn-pkg-copy" onclick="toggleBatchOperation()">批量修改</button>
-                    </div>
-                </div>
-            </div>
-            <div class="admin-sync-wrap">
-                <div id="adminSyncPanel" class="admin-sync-panel">
-                    <div class="admin-sync-panel__title">同步到其他表格</div>
-                    <div class="admin-sync-toolbar">
-                        <label class="admin-sync-all"><input type="checkbox" id="adminSyncSelectAll" onchange="adminOnSyncSelectAll(this.checked)"> 全选</label>
-                    </div>
-                    <div id="adminSyncCheckboxes" class="admin-sync-checkboxes"></div>
-                    <div class="admin-sync-actions">
-                        <button type="button" class="btn-pkg btn-pkg-save" onclick="adminApplySyncToSelected()">同步到所选表格</button>
-                        <button type="button" class="btn-pkg btn-pkg-copy" onclick="adminDismissSyncPanel()">暂不同步</button>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <input type="text" id="adminSearchInput" class="admin-input admin-input--search" placeholder="搜索分类或菜名…" autocomplete="off" oninput="scheduleRenderAdminTable()">
-            </div>
-            <div class="admin-table-scroll">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th>分类</th>
-                            <th>名称</th>
-                            <th>单位</th>
-                            <th>售价</th>
-                            <th>成本</th>
-                            <th>介绍</th>
-                            <th>图片链接</th>
-                            <th class="admin-td-actions">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="adminTableBody"></tbody>
-                </table>
-            </div>
+            <input type="file" id="adminBatchExcelIn" accept=".xlsx,.xls" style="display:none">
+            <input type="file" id="adminUpdateExcelIn" accept=".xlsx,.xls" style="display:none">
+            <input type="file" id="menuUpdateExcelIn" accept=".xlsx,.xls" style="display:none">
         </div>
     </div>
 </div>
@@ -3221,71 +3333,102 @@
         <div class="dish-detail-head">
             <div>
                 <h3>菜品详情</h3>
-                <p>编辑后点「保存」写入当前表；勾选同步项与目标表后点「同步」。</p>
+                <p>先查看菜品资料；需要修改时点「编辑」。同步会复制整条菜品信息。</p>
             </div>
             <button type="button" class="btn-action" onclick="toggleDishDetail(false)">关闭</button>
         </div>
-        <div class="dish-detail-body">
-            <div>
-                <img id="dishDetailPreviewImg" class="dish-detail-preview" alt="预览" style="display:none" onclick="openDishImageLightbox(event)" title="点击查看大图与下载（再点暗处或关闭退出）">
-                <div id="dishDetailPreviewPh" class="dish-detail-preview dish-detail-preview--empty">暂无图片</div>
-                <p id="dishDetailImgZoomHint" class="dish-detail-img-hint" style="display:none">点击图片大图预览；点暗处或「关闭」退出</p>
-                <div class="dish-detail-img-actions">
-                    <label style="font-size:12px;color:#666">图片地址</label>
-                    <input type="text" id="dishDetailImgUrl" placeholder="https://… 或粘贴 base64 数据" autocomplete="off" oninput="refreshDishDetailPreview()">
-                    <input type="file" id="dishDetailImgFile" accept="image/*" onchange="dishDetailOnImageFile(this)">
+        <div id="dishDetailView" class="dish-detail-view">
+            <div class="dish-detail-hero">
+                <div class="dish-detail-hero-media">
+                    <img id="dishDetailViewImg" class="dish-detail-view-img" alt="菜品图片" onclick="openDishImageLightbox(event)">
+                    <div id="dishDetailViewPh" class="dish-detail-view-ph">暂无图片</div>
+                </div>
+                <div class="dish-detail-view-main">
+                    <div class="dish-detail-info-card dish-detail-title-row">
+                        <h2 id="dishDetailViewName" class="dish-detail-title">—</h2>
+                        <div class="dish-detail-meta-row">
+                            <span id="dishDetailViewCat" class="dish-detail-pill">—</span>
+                            <span id="dishDetailViewUnit" class="dish-detail-pill dish-detail-pill-muted">—</span>
+                        </div>
+                    </div>
+                    <div class="dish-detail-price-card">
+                        <div class="dish-detail-stat-grid">
+                            <div class="dish-detail-stat dish-detail-stat-price">
+                                <span>售价</span>
+                                <strong id="dishDetailViewPrice">¥0.00</strong>
+                            </div>
+                            <div class="dish-detail-stat">
+                                <span>成本</span>
+                                <strong id="dishDetailViewCost">¥0.00</strong>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="dish-detail-fields">
+            <div class="dish-detail-intro">
+                <h4>菜品介绍</h4>
+                <div id="dishDetailViewIntro" class="dish-detail-intro-box">暂无介绍</div>
+            </div>
+        </div>
+        <div id="dishDetailEdit" class="dish-detail-edit">
+            <div class="dish-detail-body">
                 <div>
-                    <label for="dishDetailCat">分类</label>
-                    <input type="text" id="dishDetailCat" autocomplete="off">
-                </div>
-                <div>
-                    <label for="dishDetailName">菜品名称</label>
-                    <input type="text" id="dishDetailName" autocomplete="off">
-                </div>
-                <div class="dish-detail-row2">
-                    <div>
-                        <label for="dishDetailUnit">单位</label>
-                        <input type="text" id="dishDetailUnit" autocomplete="off">
-                    </div>
-                    <div>
-                        <label for="dishDetailPrice">售价</label>
-                        <input type="number" id="dishDetailPrice" step="any">
+                    <img id="dishDetailPreviewImg" class="dish-detail-preview" alt="预览" style="display:none" onclick="openDishImageLightbox(event)" title="点击查看大图与下载（再点暗处或关闭退出）">
+                    <div id="dishDetailPreviewPh" class="dish-detail-preview dish-detail-preview--empty">暂无图片</div>
+                    <p id="dishDetailImgZoomHint" class="dish-detail-img-hint" style="display:none">点击图片大图预览；点暗处或「关闭」退出</p>
+                    <div class="dish-detail-img-actions">
+                        <label style="font-size:12px;color:#666">图片地址</label>
+                        <input type="text" id="dishDetailImgUrl" placeholder="https://… 或粘贴 base64 数据" autocomplete="off" oninput="refreshDishDetailPreview()">
+                        <input type="file" id="dishDetailImgFile" accept="image/*" onchange="dishDetailOnImageFile(this)">
                     </div>
                 </div>
-                <div>
-                    <label for="dishDetailCost">成本</label>
-                    <input type="number" id="dishDetailCost" step="any">
-                </div>
-                <div>
-                    <label for="dishDetailIntro">菜品介绍</label>
-                    <textarea id="dishDetailIntro" placeholder="口味、规格、卖点等…"></textarea>
+                <div class="dish-detail-fields">
+                    <div>
+                        <label for="dishDetailCat">分类</label>
+                        <input type="text" id="dishDetailCat" autocomplete="off">
+                    </div>
+                    <div>
+                        <label for="dishDetailName">菜品名称</label>
+                        <input type="text" id="dishDetailName" autocomplete="off">
+                    </div>
+                    <div class="dish-detail-row2">
+                        <div>
+                            <label for="dishDetailUnit">单位</label>
+                            <input type="text" id="dishDetailUnit" autocomplete="off">
+                        </div>
+                        <div>
+                            <label for="dishDetailPrice">售价</label>
+                            <input type="number" id="dishDetailPrice" step="any">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="dishDetailCost">成本</label>
+                        <input type="number" id="dishDetailCost" step="any">
+                    </div>
+                    <div>
+                        <label for="dishDetailIntro">菜品介绍</label>
+                        <textarea id="dishDetailIntro" placeholder="口味、规格、卖点等…"></textarea>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="dish-detail-sync-block">
-            <h4>同步到其他表格（按「打开详情」时的菜名匹配）</h4>
-            <div class="dish-detail-sync-fld-toolbar">
-                <label class="admin-sync-all"><input type="checkbox" id="dishDetailSyncFldSelectAll" checked onchange="dishDetailOnSyncFldSelectAll(this.checked)"> 同步项全选</label>
-            </div>
-            <div class="dish-detail-field-cbs">
-                <label><input type="checkbox" id="dishSyncFld_cat" checked onchange="dishDetailUpdateSyncFldSelectAllState()"> 分类</label>
-                <label><input type="checkbox" id="dishSyncFld_name" checked onchange="dishDetailUpdateSyncFldSelectAllState()"> 名称</label>
-                <label><input type="checkbox" id="dishSyncFld_unit" checked onchange="dishDetailUpdateSyncFldSelectAllState()"> 单位</label>
-                <label><input type="checkbox" id="dishSyncFld_price" checked onchange="dishDetailUpdateSyncFldSelectAllState()"> 售价</label>
-                <label><input type="checkbox" id="dishSyncFld_cost" checked onchange="dishDetailUpdateSyncFldSelectAllState()"> 成本</label>
-                <label><input type="checkbox" id="dishSyncFld_intro" checked onchange="dishDetailUpdateSyncFldSelectAllState()"> 介绍</label>
-                <label><input type="checkbox" id="dishSyncFld_img" checked onchange="dishDetailUpdateSyncFldSelectAllState()"> 图片</label>
-            </div>
-            <label class="admin-sync-all" style="margin-bottom:6px;display:inline-flex"><input type="checkbox" id="dishDetailSyncSelectAll" onchange="dishDetailOnSyncSelectAll(this.checked)"> 全选表格</label>
+        <div id="dishDetailSyncBlock" class="dish-detail-sync-block">
+            <h4>同步到其他菜单</h4>
+            <label class="admin-sync-all" style="margin-bottom:6px;display:inline-flex"><input type="checkbox" id="dishDetailSyncSelectAll" onchange="dishDetailOnSyncSelectAll(this.checked)"> 全选菜单</label>
             <div id="dishDetailSyncLibs" class="dish-detail-sync-libs"></div>
         </div>
-        <div class="dish-detail-actions">
-            <button type="button" class="btn-action" onclick="toggleDishDetail(false)">取消</button>
-            <button type="button" class="btn-pkg btn-pkg-save" onclick="saveDishDetail()">保存到当前表</button>
-            <button type="button" class="btn-pkg btn-pkg-copy" onclick="applyDishDetailSync()">同步到所选表格</button>
+        <div id="dishDetailViewActions" class="dish-detail-actions">
+            <button type="button" class="btn-action" onclick="toggleDishDetail(false)">关闭</button>
+            <button type="button" class="btn-pkg btn-pkg-copy" onclick="showDishDetailSync()">同步到其他菜单</button>
+            <button type="button" class="btn-pkg btn-pkg-save" onclick="setDishDetailMode('edit')">编辑</button>
+        </div>
+        <div id="dishDetailEditActions" class="dish-detail-actions" style="display:none">
+            <button type="button" class="btn-action" onclick="setDishDetailMode('view')">取消编辑</button>
+            <button type="button" class="btn-pkg btn-pkg-save" onclick="saveDishDetail()">保存</button>
+        </div>
+        <div id="dishDetailSyncActions" class="dish-detail-actions" style="display:none">
+            <button type="button" class="btn-action" onclick="hideDishDetailSync()">取消同步</button>
+            <button type="button" class="btn-pkg btn-pkg-copy" onclick="applyDishDetailSync()">同步到所选菜单</button>
         </div>
     </div>
 </div>
@@ -3477,15 +3620,56 @@
         document.getElementById('mainApp').classList.remove('hidden');
         document.getElementById('historyPage').classList.add('hidden');
         document.getElementById('adminPage').classList.add('hidden');
-        // 更新用户信息栏
-        const displayName = currentUser?.display_name || currentUser?.username || '';
-        document.getElementById('userDisplayName').textContent = displayName;
-        // 管理员按钮
+        updateUserProfileHeader();
+        // 管理员权限
         const isAdmin = currentUser?.role === 'admin';
         document.getElementById('btnAdminPanel').style.display = isAdmin ? '' : 'none';
         // 普通用户隐藏菜品管理相关按钮
         document.body.classList.toggle('user-readonly', !isAdmin);
     }
+
+    function updateUserProfileHeader() {
+        const displayName = currentUser?.display_name || currentUser?.username || '用户';
+        const roleText = currentUser?.role === 'admin' ? '管理员' : '普通用户';
+        const initial = String(displayName || 'U').trim().charAt(0).toUpperCase() || 'U';
+        const nameEls = [
+            document.getElementById('userDisplayName'),
+            document.getElementById('userMenuName')
+        ];
+        nameEls.forEach(el => { if (el) el.textContent = displayName; });
+        const avatarEls = [
+            document.getElementById('userAvatar'),
+            document.getElementById('userMenuAvatar')
+        ];
+        avatarEls.forEach(el => { if (el) el.textContent = initial; });
+        const roleEl = document.getElementById('userMenuRole');
+        if (roleEl) roleEl.textContent = roleText;
+    }
+
+    function closeUserProfileMenu() {
+        const menu = document.getElementById('userProfileMenu');
+        const trigger = document.getElementById('userProfileTrigger');
+        if (menu) menu.classList.remove('is-open');
+        if (trigger) {
+            trigger.classList.remove('is-open');
+            trigger.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    function toggleUserProfileMenu(event) {
+        if (event) event.stopPropagation();
+        const menu = document.getElementById('userProfileMenu');
+        const trigger = document.getElementById('userProfileTrigger');
+        if (!menu || !trigger) return;
+        const opening = !menu.classList.contains('is-open');
+        menu.classList.toggle('is-open', opening);
+        trigger.classList.toggle('is-open', opening);
+        trigger.setAttribute('aria-expanded', opening ? 'true' : 'false');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('#userBar')) closeUserProfileMenu();
+    });
 
     /** 导航到套餐历史独立页面 */
     function navigateToHistoryPage() {
@@ -3516,9 +3700,9 @@
 
     /** 初始化历史页面 */
     function initHistoryPage() {
-        // 填充表格筛选下拉框
+        // 填充菜单筛选下拉框
         const libSelect = document.getElementById('historyPageFilterLib');
-        libSelect.innerHTML = '<option value="">全部表格</option>';
+        libSelect.innerHTML = '<option value="">全部菜单</option>';
         libraries.forEach(lib => {
             const opt = document.createElement('option');
             opt.value = lib.id;
@@ -3594,10 +3778,12 @@
         ).join('');
     }
 
-    /** 修改 toggleAdmin 为打开独立页面 */
     function toggleAdmin(s) {
         if (s) {
-            navigateToAdminPage();
+            resetAddDishForm();
+            document.getElementById("adminModal").style.display = "block";
+        } else {
+            document.getElementById("adminModal").style.display = "none";
         }
     }
 
@@ -4073,7 +4259,21 @@
         }
     }
 
+    function persistenceUserKey(key) {
+        const uid = currentUser && currentUser.id != null
+            ? String(currentUser.id)
+            : String(currentUser?.username || "anonymous");
+        return key + "__user_" + uid;
+    }
+
+    function libraryDataForBackend(lib) {
+        const data = Object.assign({}, lib);
+        delete data.history;
+        return data;
+    }
+
     async function persistenceGet(key) {
+        const userKey = persistenceUserKey(key);
         try {
             // 优先从后端加载数据
             const response = await authFetch('/api/libraries', {
@@ -4086,7 +4286,7 @@
                     let localData = null;
                     if (_persistMode === "localStorage") {
                         try {
-                            const localRaw = localStorage.getItem(key);
+                            const localRaw = localStorage.getItem(userKey);
                             if (localRaw) {
                                 localData = JSON.parse(localRaw);
                             }
@@ -4095,7 +4295,7 @@
                         }
                     } else {
                         try {
-                            const localRaw = await idbGet(key);
+                            const localRaw = await idbGet(userKey);
                             if (localRaw) localData = JSON.parse(localRaw);
                         } catch (e) { /* ignore */ }
                     }
@@ -4104,6 +4304,7 @@
                         try {
                             const libData = JSON.parse(lib.data);
                             libData.backendId = lib.id;
+                            delete libData.history;
                             // 从本地数据中恢复该库的 history（用户自己的套餐历史）
                             if (localData && localData.libraries) {
                                 const localLib = localData.libraries.find(l => l.id === libData.id || l.backendId === lib.id);
@@ -4133,25 +4334,26 @@
         
         if (_persistMode === "localStorage") {
             try {
-                return localStorage.getItem(key);
+                return localStorage.getItem(userKey);
             } catch (e) {
                 return null;
             }
         }
-        return idbGet(key);
+        return idbGet(userKey);
     }
 
     async function persistenceSet(key, value) {
+        const userKey = persistenceUserKey(key);
         // 先保存到本地存储
         if (_persistMode === "localStorage") {
             try {
-                localStorage.setItem(key, value);
+                localStorage.setItem(userKey, value);
             } catch (err) {
                 showToast("保存失败，本地存储可能已满，请删除部分表格后重试。", "error");
                 throw err;
             }
         } else {
-            await idbSet(key, value);
+            await idbSet(userKey, value);
         }
         
         // 再保存到后端服务器（加锁，防止并发请求堆积）
@@ -4162,18 +4364,19 @@
                     const isAdmin = currentUser?.role === 'admin';
                     if (data.libraries && Array.isArray(data.libraries)) {
                         for (const lib of data.libraries) {
+                            const backendData = libraryDataForBackend(lib);
                             if (lib.backendId) {
                                 await authFetch('/api/libraries/' + lib.backendId, {
                                     method: 'PUT',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ name: lib.name, data: lib })
+                                    body: JSON.stringify({ name: lib.name, data: backendData })
                                 });
                             } else {
                                 if (!isAdmin) continue;
                                 const response = await authFetch('/api/libraries', {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ name: lib.name, data: lib })
+                                    body: JSON.stringify({ name: lib.name, data: backendData })
                                 });
                                 const result = await response.json();
                                 if (result.success && result.id) {
@@ -4215,6 +4418,8 @@
     let historyBulkMode = false;
     let historyEditHid = null;
     let historyEditLibId = null;
+    /** 从历史点「编辑」加载到首页后，下一次保存会作为原历史的新版本，而不是覆盖原历史 */
+    let editingHistorySource = null;
     /** 历史弹窗排序：维度 time | gp | disc；asc 对时间为「旧→新」，对团购价/折扣为「低→高」 */
     let historySortKey = "time";
     let historySortAsc = false;
@@ -4225,8 +4430,110 @@
     /** 菜品详情弹窗：db 下标、打开时菜名（用于跨表同步匹配） */
     let dishDetailIdx = -1;
     let dishDetailAnchorName = "";
+    let menuUpdateTargetId = null;
 
     function escapeHtml(s) { return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+    function normalizeMarkdownLinkHref(raw) {
+        let href = String(raw || "").trim();
+        if (!href) return "";
+        if (/^www\./i.test(href)) href = "https://" + href;
+        if (/^(https?:\/\/|mailto:|tel:)/i.test(href)) return href;
+        return "";
+    }
+    function renderDishIntroInlineMarkdown(text) {
+        let s = String(text || "");
+        const tokens = [];
+        const token = (html) => {
+            const key = `@@MDTOKEN${tokens.length}@@`;
+            tokens.push({ key, html });
+            return key;
+        };
+        s = s.replace(/\[([^\]\n]+)\]\(([^)\s]+)\)/g, (m, label, hrefRaw) => {
+            const href = normalizeMarkdownLinkHref(hrefRaw);
+            if (!href) return m;
+            return token(`<a href="${escapeAttr(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`);
+        });
+        s = escapeHtml(s);
+        s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+        s = s.replace(/(https?:\/\/[^\s<]+|www\.[^\s<]+)/g, (m) => {
+            const trimmed = m.replace(/[，。；、,.!?！？;:：]+$/, "");
+            const tail = m.slice(trimmed.length);
+            const href = normalizeMarkdownLinkHref(trimmed);
+            return href ? `<a href="${escapeAttr(href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(trimmed)}</a>${escapeHtml(tail)}` : m;
+        });
+        s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        s = s.replace(/__([^_]+)__/g, "<strong>$1</strong>");
+        s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+        s = s.replace(/(^|[^_])_([^_\n]+)_/g, "$1<em>$2</em>");
+        tokens.forEach(({ key, html }) => { s = s.replaceAll(key, html); });
+        return s;
+    }
+    function renderDishIntroMarkdown(text) {
+        const raw = String(text || "").replace(/\r\n?/g, "\n").trim();
+        if (!raw) return '<span class="dish-detail-intro-empty">暂无介绍</span>';
+        const lines = raw.split("\n");
+        const out = [];
+        let listType = "";
+        let para = [];
+        const closePara = () => {
+            if (!para.length) return;
+            out.push(`<p>${para.map(line => renderDishIntroInlineMarkdown(line)).join("<br>")}</p>`);
+            para = [];
+        };
+        const closeList = () => {
+            if (!listType) return;
+            out.push(`</${listType}>`);
+            listType = "";
+        };
+        const openList = (type) => {
+            if (listType === type) return;
+            closeList();
+            listType = type;
+            out.push(`<${type}>`);
+        };
+        lines.forEach((line) => {
+            const t = line.trim();
+            if (!t) {
+                closePara();
+                closeList();
+                return;
+            }
+            const heading = t.match(/^(#{1,3})\s+(.+)$/);
+            if (heading) {
+                closePara();
+                closeList();
+                const level = heading[1].length;
+                out.push(`<h${level}>${renderDishIntroInlineMarkdown(heading[2])}</h${level}>`);
+                return;
+            }
+            const quote = t.match(/^>\s*(.+)$/);
+            if (quote) {
+                closePara();
+                closeList();
+                out.push(`<blockquote>${renderDishIntroInlineMarkdown(quote[1])}</blockquote>`);
+                return;
+            }
+            const ul = t.match(/^[-*+]\s+(.+)$/);
+            if (ul) {
+                closePara();
+                openList("ul");
+                out.push(`<li>${renderDishIntroInlineMarkdown(ul[1])}</li>`);
+                return;
+            }
+            const ol = t.match(/^\d+[.)]\s+(.+)$/);
+            if (ol) {
+                closePara();
+                openList("ol");
+                out.push(`<li>${renderDishIntroInlineMarkdown(ol[1])}</li>`);
+                return;
+            }
+            closeList();
+            para.push(t);
+        });
+        closePara();
+        closeList();
+        return out.join("");
+    }
     function normalizeImageField(v) {
         if (v == null || v === "") return "";
         if (typeof v === "object") {
@@ -4836,39 +5143,72 @@
         modal.className = 'modal';
         modal.style.display = 'flex';
         modal.innerHTML = `
-            <div class="modal-content" style="max-width: 600px; height: 80vh;">
+            <div class="modal-content" style="max-width: 760px; height: 84vh;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
                     <h3 style="margin:0">使用帮助</h3>
                     <button type="button" class="btn-action" onclick="this.closest('.modal').remove()">关闭</button>
                 </div>
-                <div style="flex:1; overflow-y:auto;">
-                    <div style="padding:10px;">
-                        <h4>基本操作</h4>
+                <div style="flex:1; overflow-y:auto; line-height:1.65; color:var(--text-secondary);">
+                    <div style="padding:4px 10px 16px;">
+                        <h4 style="margin:10px 0 8px;color:var(--text);">一、菜单与菜品库</h4>
                         <ul>
-                            <li><strong>添加菜品到套餐：</strong>在左侧选择分类，中间选择菜品，点击加减按钮调整数量</li>
-                            <li><strong>修改套餐价格：</strong>在右侧「套餐定价」输入框中输入价格</li>
-                            <li><strong>保存套餐：</strong>点击「保存」按钮将当前套餐保存到历史记录</li>
-                            <li><strong>导入导出：</strong>支持导入Excel菜品库，导出套餐为Excel或PDF</li>
+                            <li><strong>切换菜单：</strong>顶部显示当前菜单名，点击「管理菜单」可在弹窗里切换不同菜单，切换后菜品库和套餐配置会跟着当前菜单变化。</li>
+                            <li><strong>导入 / 重命名 / 删除菜单：</strong>在「管理菜单」弹窗中操作。删除菜单后，该菜单下已保存的套餐历史仍会保留在历史页。</li>
+                            <li><strong>新增菜品：</strong>点击菜品列表上方「新增菜品」，填写菜品名称、品类、单位、售价、成本、介绍、图片；也可点「批量新增」从 Excel 一次新增多道菜。</li>
+                            <li><strong>同步到其他菜单：</strong>新增菜品或编辑菜品详情后，可勾选其他菜单同步。同步会复制这道菜的完整信息。</li>
                         </ul>
-                        
-                        <h4>数据管理</h4>
+
+                        <h4 style="margin:18px 0 8px;color:var(--text);">二、菜品详情</h4>
                         <ul>
-                            <li><strong>备份数据：</strong>点击「备份数据」按钮下载备份文件</li>
-                            <li><strong>恢复数据：</strong>点击「恢复数据」按钮选择备份文件</li>
-                            <li><strong>批量操作：</strong>在库管理中使用批量操作修改菜品信息</li>
+                            <li><strong>查看详情：</strong>点击菜品卡片可打开菜品详情页，查看图片、名称、品类、单位、售价、成本和菜品介绍。</li>
+                            <li><strong>编辑菜品：</strong>在详情页点击「编辑」后可修改信息，保存后立即更新当前菜单。</li>
+                            <li><strong>图片查看：</strong>有图片时会完整显示，点击图片可查看大图并下载。</li>
+                            <li><strong>菜品介绍：</strong>支持 Markdown 格式。链接如 <code>https://...</code>、<code>www...</code> 或 <code>[文字](https://...)</code> 会显示成可点击链接。</li>
                         </ul>
-                        
-                        <h4>报表分析</h4>
+
+                        <h4 style="margin:18px 0 8px;color:var(--text);">三、套餐配置</h4>
                         <ul>
-                            <li><strong>当前套餐分析：</strong>查看当前套餐的成本、毛利分析</li>
-                            <li><strong>历史数据分析：</strong>查看历史套餐的统计数据</li>
+                            <li><strong>添加菜品：</strong>在菜品列表中点击「+」加入套餐，点击「-」减少数量。</li>
+                            <li><strong>套餐排序：</strong>右侧套餐配置里的菜品可拖动排序。排序后再新增菜品，新菜会追加到最后，不会打乱已调整好的顺序。</li>
+                            <li><strong>套餐定价：</strong>填写套餐定价后，毛利率按 <code>(套餐定价 - 总成本) / 套餐定价 × 100%</code> 计算。</li>
+                            <li><strong>未填定价：</strong>如果套餐定价为空，毛利率按 <code>(套餐原价 - 总成本) / 套餐原价 × 100%</code> 计算。</li>
+                            <li><strong>导出：</strong>可将当前套餐导出为图片、Excel、PDF 等格式。</li>
                         </ul>
-                        
-                        <h4>移动端使用</h4>
+
+                        <h4 style="margin:18px 0 8px;color:var(--text);">四、套餐历史与版本</h4>
                         <ul>
-                            <li>在移动设备上，界面会自动适配屏幕大小</li>
-                            <li>可以通过左右滑动调整面板宽度</li>
-                            <li>点击菜品可以查看详细信息</li>
+                            <li><strong>保存历史：</strong>在套餐配置区点击「保存」，会把当前套餐保存到套餐历史。</li>
+                            <li><strong>历史隔离：</strong>套餐历史按登录用户和当前浏览器本地缓存隔离。管理员和普通用户、不同普通用户之间互相看不到对方历史。</li>
+                            <li><strong>看板视图：</strong>套餐历史页按菜单分列展示，默认一屏最多三列，超过三列可横向滑动；拖动列头可调整列顺序。</li>
+                            <li><strong>编辑历史：</strong>在历史页点击「编辑」，会直接回到首页并加载该套餐内容。编辑后再次保存，会生成一个新版本，原版本不会被覆盖。</li>
+                            <li><strong>版本关联：</strong>同一套餐的不同版本会互相关联，可在历史卡片里切换查看。</li>
+                            <li><strong>差异标记：</strong>新版本会和上一版对比。套餐名、成本、折扣、毛利率用高亮框标记；团购价、总价、菜品新增/删除、备注变化会在卡片中写出具体变化。</li>
+                        </ul>
+
+                        <h4 style="margin:18px 0 8px;color:var(--text);">五、数据备份与恢复</h4>
+                        <ul>
+                            <li><strong>备份数据：</strong>下载当前本地数据备份文件，用于迁移或防止误删。</li>
+                            <li><strong>恢复数据：</strong>选择之前备份的文件恢复数据。恢复会影响当前浏览器里的本地数据，请确认后再操作。</li>
+                            <li><strong>云端说明：</strong>菜品库可从后端加载；套餐历史目前是账号 + 当前浏览器本地缓存隔离，不是跨设备云同步。</li>
+                        </ul>
+
+                        <h4 style="margin:18px 0 8px;color:var(--text);">六、Excel 模板下载</h4>
+                        <div style="display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;">
+                            <button type="button" class="btn-action" onclick="downloadMenuTemplate('batch')">下载批量新增菜品模板</button>
+                            <button type="button" class="btn-action" onclick="downloadMenuTemplate('update')">下载更新菜单模板</button>
+                            <button type="button" class="btn-action" onclick="downloadMenuTemplate('import')">下载导入菜单模板</button>
+                        </div>
+                        <ul>
+                            <li><strong>批量新增菜品模板：</strong>用于「新增菜品」里的批量新增，会把 Excel 里的菜合并到当前菜单。</li>
+                            <li><strong>更新菜单模板：</strong>用于菜单管理里的「更新菜单」。同名菜会更新价格、成本、单位、分类、介绍、图片；菜单里没有的菜会新增；「下架」填“是/1/TRUE/√”会从该菜单移除。</li>
+                            <li><strong>导入菜单模板：</strong>用于菜单管理里的「导入新菜单」，会创建一个新的完整菜单。</li>
+                        </ul>
+
+                        <h4 style="margin:18px 0 8px;color:var(--text);">七、移动端</h4>
+                        <ul>
+                            <li>系统会根据设备自动使用 PC 或手机端布局。</li>
+                            <li>手机端顶部菜单可切换菜品库、套餐配置和个人中心。</li>
+                            <li>手机端同样支持菜品详情、套餐编辑、历史查看、备份恢复等核心功能。</li>
                         </ul>
                     </div>
                 </div>
@@ -4878,16 +5218,18 @@
     }
 
     // 移动端适配
-    function initMobileAdaptation() {
-        // 检测是否为真实移动设备（非桌面端预览）
-        function isRealMobileDevice() {
-            if (window.innerWidth >= 1024) return false;
-            const ua = navigator.userAgent || navigator.vendor || '';
-            const hasTouchScreen = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-            const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
-            return hasTouchScreen || isMobileUA;
-        }
+    function isRealMobileDevice() {
+        const ua = navigator.userAgent || navigator.vendor || '';
+        const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua);
+        const isIPadLike = navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
+        return isMobileUA || isIPadLike;
+    }
 
+    function isMobileLayoutMode() {
+        return document.body.classList.contains('mobile-preview-mode') || document.body.classList.contains('mobile-real-device');
+    }
+
+    function initMobileAdaptation() {
         // 真实移动设备自动启用移动端界面
         if (isRealMobileDevice()) {
             document.body.classList.add('mobile-preview-mode');
@@ -4901,8 +5243,8 @@
             const midPanel = document.getElementById('midPanel');
             const rightPanel = document.getElementById('rightPanel');
 
-            if (width < 1024) {
-                // 移动端/平板模式（CSS 媒体查询已处理，不需要 JS 设置宽度）
+            if (isMobileLayoutMode()) {
+                // 移动端模式（CSS 已处理，不需要 JS 设置宽度）
                 leftPanel.style.width = '';
                 rightPanel.style.width = '';
             } else {
@@ -5197,6 +5539,47 @@
         if (!Array.isArray(lib.history)) lib.history = [];
     }
 
+    function allHistoryHolders() {
+        return [...libraries, ...(Array.isArray(orphanedHistoryLibs) ? orphanedHistoryLibs : [])];
+    }
+
+    function findHistoryHolder(libId) {
+        return libraries.find(l => l.id === libId) || (orphanedHistoryLibs || []).find(l => l.id === libId) || null;
+    }
+
+    function findHistoryRecord(libId, hid) {
+        const holder = findHistoryHolder(libId);
+        if (!holder || !hid) return null;
+        ensureLibHistory(holder);
+        const h = holder.history.find(x => x.id === hid);
+        return h ? { holder, h } : null;
+    }
+
+    function historyVersionRootId(h) {
+        return (h && (h.versionRootId || h.rootHistoryId || h.id)) || "";
+    }
+
+    function collectHistoryVersions(rootId) {
+        if (!rootId) return [];
+        const out = [];
+        allHistoryHolders().forEach((holder) => {
+            ensureLibHistory(holder);
+            (holder.history || []).forEach((h) => {
+                if (historyVersionRootId(h) === rootId) out.push({ lib: holder, h });
+            });
+        });
+        out.sort((a, b) => (a.h.ts || 0) - (b.h.ts || 0));
+        return out;
+    }
+
+    function ensureHistoryVersionRoot(libId, hid) {
+        const found = findHistoryRecord(libId, hid);
+        if (!found) return "";
+        const rootId = historyVersionRootId(found.h);
+        if (!found.h.versionRootId) found.h.versionRootId = rootId;
+        return rootId;
+    }
+
     function buildPackageSnapshot() {
         const pkgName = document.getElementById("pkgNameInput").value || "";
         const groupPrice = String(document.getElementById("groupPrice").value ?? "");
@@ -5223,7 +5606,7 @@
         });
     }
 
-    /** 写入一条套餐历史。返回 added / duplicate / error / noop */
+    /** 写入一条套餐历史。返回 added / version / duplicate / error / noop */
     async function tryRecordHistoryForLib(lib) {
         if (!lib) return "noop";
         ensureLibHistory(lib);
@@ -5234,18 +5617,32 @@
         const lastSig = last
             ? packageSnapshotSignature({ pkgName: last.pkgName, groupPrice: last.groupPrice, pkgRemark: last.pkgRemark || "", items: last.items })
             : null;
-        if (lastSig === sig) return "duplicate";
-        lib.history.unshift({
-            id: newLibraryId(),
+        const versionSource = editingHistorySource ? { ...editingHistorySource } : null;
+        if (!versionSource && lastSig === sig) return "duplicate";
+        const newEntryId = newLibraryId();
+        const entry = {
+            id: newEntryId,
             ts: Date.now(),
             pkgName: snap.pkgName,
             groupPrice: snap.groupPrice,
             pkgRemark: snap.pkgRemark || "",
             items: snap.items
-        });
+        };
+        if (versionSource) {
+            const rootId = ensureHistoryVersionRoot(versionSource.libId, versionSource.hid) || versionSource.rootId || versionSource.hid || newEntryId;
+            entry.versionRootId = rootId;
+            entry.previousVersionId = versionSource.hid;
+            entry.previousVersionLibId = versionSource.libId;
+            entry.editedFrom = { libId: versionSource.libId, hid: versionSource.hid };
+        }
+        lib.history.unshift(entry);
         if (lib.history.length > HISTORY_MAX) lib.history.length = HISTORY_MAX;
         try {
             await persistenceSet(STORAGE_KEY, JSON.stringify({ activeId, libraries, orphanedHistoryLibs }));
+            if (versionSource) {
+                editingHistorySource = null;
+                return "version";
+            }
             return "added";
         } catch (e) {
             lib.history.shift();
@@ -5259,6 +5656,7 @@
         if (!lib) { showToast("请先导入表格", "warn"); return; }
         const r = await tryRecordHistoryForLib(lib);
         if (r === "added") showToast("已保存，可在「历史」中查看", "success");
+        else if (r === "version") showToast("已保存为新版本，可在「历史」中查看关联", "success");
         else if (r === "duplicate") showToast("与上一条历史完全相同，未重复添加", "warn");
     }
 
@@ -5331,81 +5729,96 @@
         if (sel && activeId) sel.value = activeId;
     }
 
-    /* ===== PC端内联展开列表（表格切换） ===== */
-    let _libInlineOpen = false;
-
-    function toggleLibInlineList() {
-        _libInlineOpen = !_libInlineOpen;
-        var trigger = document.getElementById('libInlineTrigger');
-        var dropdown = document.getElementById('libInlineDropdown');
-        if (_libInlineOpen) {
-            renderLibInlineList();
-            trigger.classList.add('open');
-            dropdown.classList.add('open');
-            var searchInput = document.getElementById('libInlineSearchInput');
-            if (searchInput) { searchInput.value = ''; searchInput.focus(); }
-        } else {
-            trigger.classList.remove('open');
-            dropdown.classList.remove('open');
-        }
-    }
-
-    function closeLibInlineList() {
-        if (!_libInlineOpen) return;
-        _libInlineOpen = false;
-        var trigger = document.getElementById('libInlineTrigger');
-        var dropdown = document.getElementById('libInlineDropdown');
-        if (trigger) trigger.classList.remove('open');
-        if (dropdown) dropdown.classList.remove('open');
-    }
-
-    function renderLibInlineList(filter) {
-        var listEl = document.getElementById('libInlineList');
-        if (!listEl) return;
-        var keyword = (filter || '').trim().toLowerCase();
-        var filtered = libraries.filter(function(l) {
-            return !keyword || l.name.toLowerCase().includes(keyword);
-        });
-        if (!filtered.length) {
-            listEl.innerHTML = '<div class="lib-inline-empty">无匹配表格</div>';
-            return;
-        }
-        listEl.innerHTML = filtered.map(function(l) {
-            var isActive = l.id === activeId;
-            return '<div class="lib-inline-item' + (isActive ? ' active' : '') + '" data-libid="' + escapeAttr(l.id) + '" onclick="selectLibInline(\'' + escapeAttr(l.id) + '\')">'
-                + '<span class="lib-item-check">' + (isActive ? '✓' : '') + '</span>'
-                + '<span class="lib-item-name">' + escapeHtml(l.name) + '</span>'
-                + '</div>';
-        }).join('');
-    }
-
-    function filterLibInlineList(keyword) {
-        renderLibInlineList(keyword);
-    }
-
-    function selectLibInline(id) {
-        closeLibInlineList();
-        switchLibrary(id);
-    }
-
-    function createNewLibraryFromInline() {
-        closeLibInlineList();
-        document.getElementById('fileIn').click();
-    }
-
-    function updateLibInlineValue() {
-        var valueEl = document.getElementById('libInlineValue');
+    /* ===== 菜单管理弹窗 ===== */
+    function updateMenuCurrentName() {
+        var valueEl = document.getElementById('menuCurrentName');
         if (!valueEl) return;
         var lib = libraries.find(function(l) { return l.id === activeId; });
         valueEl.textContent = lib ? lib.name : '— 请先导入 Excel —';
     }
 
-    // 点击外部关闭
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('#libInlineSwitch')) {
-            closeLibInlineList();
+    function toggleMenuManager(show) {
+        var modal = document.getElementById('menuManagerModal');
+        if (!modal) return;
+        if (show) {
+            modal.style.display = 'block';
+            modal.setAttribute('aria-hidden', 'false');
+            var searchInput = document.getElementById('menuManagerSearch');
+            if (searchInput) searchInput.value = '';
+            renderMenuManagerList();
+            setTimeout(function() { if (searchInput) searchInput.focus(); }, 30);
+        } else {
+            modal.style.display = 'none';
+            modal.setAttribute('aria-hidden', 'true');
         }
-    });
+    }
+
+    function renderMenuManagerList(filter) {
+        var host = document.getElementById('menuManagerList');
+        if (!host) return;
+        var keyword = (filter || '').trim().toLowerCase();
+        var filtered = libraries.filter(function(l) {
+            return !keyword || String(l.name || '').toLowerCase().includes(keyword);
+        });
+        if (!libraries.length) {
+            host.innerHTML = '<div class="menu-manager-empty">暂无菜单，请点击上方「导入新菜单」。</div>';
+            return;
+        }
+        if (!filtered.length) {
+            host.innerHTML = '<div class="menu-manager-empty">没有匹配的菜单。</div>';
+            return;
+        }
+        host.innerHTML = filtered.map(function(l) {
+            var isActive = l.id === activeId;
+            var count = Array.isArray(l.db) ? l.db.length : 0;
+            var historyCount = Array.isArray(l.history) ? l.history.length : 0;
+            return '<div class="menu-manager-row' + (isActive ? ' is-active' : '') + '">'
+                + '<div class="menu-manager-main">'
+                + '<div class="menu-manager-name"><span>' + escapeHtml(l.name || '未命名菜单') + '</span>' + (isActive ? '<span class="menu-manager-active-badge">当前</span>' : '') + '</div>'
+                + '<div class="menu-manager-meta">' + count + ' 道菜 · ' + historyCount + ' 条套餐历史' + (l.sourceFile ? ' · ' + escapeHtml(l.sourceFile) : '') + '</div>'
+                + '</div>'
+                + '<div class="menu-manager-actions">'
+                + (isActive ? '<button type="button" class="btn-action btn-primary" disabled>正在使用</button>' : '<button type="button" class="btn-action btn-primary" onclick="menuManagerSwitch(&quot;' + escapeAttr(l.id) + '&quot;)">切换</button>')
+                + '<button type="button" class="btn-action" onclick="menuManagerUpdate(&quot;' + escapeAttr(l.id) + '&quot;)">更新菜单</button>'
+                + '<button type="button" class="btn-action" onclick="menuManagerRename(&quot;' + escapeAttr(l.id) + '&quot;)">重命名</button>'
+                + '<button type="button" class="btn-action" style="color:#cf1322;border-color:#ffccc7" onclick="menuManagerDelete(&quot;' + escapeAttr(l.id) + '&quot;)">删除</button>'
+                + '</div>'
+                + '</div>';
+        }).join('');
+    }
+
+    function menuManagerSwitch(id) {
+        switchLibrary(id);
+        toggleMenuManager(false);
+    }
+
+    async function menuManagerRename(id) {
+        if (id && id !== activeId) switchLibrary(id);
+        await renameCurrentLibrary();
+    }
+
+    async function menuManagerDelete(id) {
+        if (id && id !== activeId) switchLibrary(id);
+        await deleteCurrentLibrary();
+    }
+
+    function menuManagerUpdate(id) {
+        menuUpdateTargetId = id;
+        const inp = document.getElementById('menuManagerUpdateExcelIn') || document.getElementById('menuUpdateExcelIn');
+        if (inp) inp.click();
+    }
+
+    function syncLibraryControlValues() {
+        var sel = document.getElementById("librarySelect");
+        if (sel && activeId) sel.value = activeId;
+        updateMenuCurrentName();
+        var manager = document.getElementById("menuManagerModal");
+        if (manager && manager.style.display === "block") {
+            renderMenuManagerList((document.getElementById('menuManagerSearch') || {}).value || '');
+        }
+        var mobileSelect = document.getElementById("mobileLibrarySelect");
+        if (mobileSelect && activeId) mobileSelect.value = activeId;
+    }
 
     function renderLibrarySelect() {
         const sel = document.getElementById("librarySelect");
@@ -5414,12 +5827,12 @@
             : `<option value="">— 请先导入 Excel —</option>`;
         if (activeId && libraries.some(l => l.id === activeId)) sel.value = activeId;
         else if (libraries.length) { activeId = libraries[0].id; sel.value = activeId; applyActiveLibrary(); }
-        // 同步更新内联展开列表的显示值
-        updateLibInlineValue();
+        syncLibraryControlValues();
     }
 
     function switchLibrary(id) {
         if (!id || id === activeId) return;
+        editingHistorySource = null;
         persistLibMeta();
         save();
         activeId = id;
@@ -5428,25 +5841,27 @@
         q = "";
         const si = document.getElementById("searchInput");
         if (si) si.value = "";
+        syncLibraryControlValues();
         refresh();
     }
 
     async function renameCurrentLibrary() {
         const lib = activeLib();
-        if (!lib) { showToast("请先导入至少一个表格", "warn"); return; }
-        const n = await showPromptDialog("表格显示名称（不影响已存文件）", lib.name);
+        if (!lib) { showToast("请先导入至少一个菜单", "warn"); return; }
+        const n = await showPromptDialog("菜单显示名称（不影响已存文件）", lib.name);
         if (n == null) return;
         const t = n.trim();
         if (!t) { showToast("名称不能为空", "warn"); return; }
         lib.name = t;
         save();
         renderLibrarySelect();
-        showToast("已重命名当前表格", "success");
+        renderMenuManagerList((document.getElementById('menuManagerSearch') || {}).value || '');
+        showToast("已重命名当前菜单", "success");
     }
 
     async function deleteCurrentLibrary() {
         if (!libraries.length) return;
-        if (!(await showConfirm("确定删除当前表格？该表内的菜品数据将删除；已保存的套餐历史会保留在「历史」中（归入已删表名下）。"))) return;
+        if (!(await showConfirm("确定删除当前菜单？该菜单内的菜品数据将删除；已保存的套餐历史会保留在「历史」中（归入已删菜单名下）。"))) return;
         const idx = libraries.findIndex(l => l.id === activeId);
         if (idx === -1) return;
         const removed = libraries[idx];
@@ -5478,12 +5893,13 @@
         }
         save();
         renderLibrarySelect();
+        renderMenuManagerList((document.getElementById('menuManagerSearch') || {}).value || '');
         curCat = "";
         q = "";
         const si = document.getElementById("searchInput");
         if (si) si.value = "";
         refresh();
-        showToast("已删除该表格", "success");
+        showToast("已删除该菜单", "success");
     }
 
     // window.onload 已移至 initApp()，由认证系统在登录成功后调用
@@ -5588,10 +6004,8 @@ function initSortable() {
     }
 
     /**
-     * 按当前购物车重算 manualOrder（0 起连续）。
-     * - 若存在 importLineNo（文本导入行号）：先按导入行序，再排无行号的（手点）按品类权重。
-     * - 若全无 importLineNo：仅按品类权重 + 菜名稳定次序。
-     * 拖拽排序后应清除 importLineNo，此后只按品类规则排手点项。
+     * 文本导入套餐后重算 manualOrder（0 起连续）。
+     * 普通手动加减不调用这里，避免覆盖用户在套餐配置中拖拽调整过的顺序。
      */
     function recomputeCartManualOrder() {
         const sel = db.filter(i => (i.qty || 0) > 0);
@@ -5611,6 +6025,16 @@ function initSortable() {
             return cmpName(a, b);
         });
         sel.forEach((row, i) => { row.manualOrder = i; });
+    }
+
+    function nextCartManualOrder(excludeItem) {
+        let maxOrder = -1;
+        db.forEach(row => {
+            if (row === excludeItem || (row.qty || 0) <= 0) return;
+            const n = Number(row.manualOrder);
+            if (Number.isFinite(n)) maxOrder = Math.max(maxOrder, n);
+        });
+        return maxOrder + 1;
     }
 
     function onSearch() {
@@ -5714,7 +6138,7 @@ function renderCart() {
     // 过滤出已选菜品，并按照记录的 manualOrder 排序
     const selected = db.filter(i => i.qty > 0).sort((a, b) => (a.manualOrder || 0) - (b.manualOrder || 0));
     const idxMap = idxMapFromDb();
-    const isMobile = window.innerWidth < 1024 || document.body.classList.contains('mobile-preview-mode') || document.body.classList.contains('mobile-real-device');
+    const isMobile = isMobileLayoutMode();
 
     if (isMobile) {
         // 移动端：包裹左滑删除容器
@@ -5762,13 +6186,17 @@ function renderCart() {
     // 移动端绑定触摸事件
     if (isMobile) initMobileCartGestures();
 }
-        // 3. 修改数量逻辑：确保新添加的菜品获得一个合理的初始序号
+        // 3. 修改数量逻辑：保留既有套餐顺序，新添加菜品追加到末尾
 function updateQty(idx, d) {
     const item = db[idx];
     const oldQty = item.qty || 0;
     item.qty = Math.max(0, oldQty + d);
-    if (item.qty === 0) delete item.importLineNo;
-    recomputeCartManualOrder();
+    if (oldQty === 0 && item.qty > 0) {
+        item.manualOrder = nextCartManualOrder(item);
+        delete item.importLineNo;
+    } else if (oldQty > 0 && item.qty === 0) {
+        delete item.importLineNo;
+    }
     requestAnimationFrame(() => {
         patchDishQtyInMenu(idx, item.qty);
         // 只在新增(0→>0)或删除(>0→0)时全量重建购物车，否则局部更新
@@ -5782,11 +6210,10 @@ function updateQty(idx, d) {
     scheduleDebouncedSave();
 }
         
-            // 4. 删除逻辑：只改数量，保留序号
+            // 4. 删除逻辑：只移除当前菜品，不重排其他菜品
 function removeItem(idx) {
     db[idx].qty = 0;
     delete db[idx].importLineNo;
-    recomputeCartManualOrder();
     requestAnimationFrame(() => {
         patchDishQtyInMenu(idx, 0);
         renderCart();
@@ -5799,7 +6226,8 @@ function removeItem(idx) {
         let ori = 0, cost = 0;
         db.forEach(i => { if(i.qty > 0) { ori += i.售价*i.qty; cost += i.成本*i.qty; } });
         const gp = parseFloat(document.getElementById("groupPrice").value) || 0;
-        const disc = ori > 0 ? (gp / ori * 10) : 0, rate = gp > 0 ? ((gp - cost) / gp * 100) : 0;
+        const marginBase = gp > 0 ? gp : ori;
+        const disc = ori > 0 ? (gp / ori * 10) : 0, rate = marginBase > 0 ? ((marginBase - cost) / marginBase * 100) : 0;
         document.getElementById("resOri").innerText = ori.toFixed(2);
         document.getElementById("resCost").innerText = cost.toFixed(2);
         document.getElementById("resDisc").innerText = disc.toFixed(2) + "折";
@@ -5867,6 +6295,21 @@ function removeItem(idx) {
         return m ? m[1].trim() : s;
     }
 
+    function extractImportGroupPrice(firstLine) {
+        const s = String(firstLine || "");
+        const patterns = [
+            /团购价\s*[¥￥]?\s*([0-9]+(?:\.[0-9]+)?)/,
+            /套餐定价\s*[¥￥]?\s*([0-9]+(?:\.[0-9]+)?)/,
+            /定价\s*[¥￥]?\s*([0-9]+(?:\.[0-9]+)?)/,
+            /售价\s*[¥￥]?\s*([0-9]+(?:\.[0-9]+)?)/
+        ];
+        for (const p of patterns) {
+            const m = s.match(p);
+            if (m) return m[1];
+        }
+        return "";
+    }
+
     const IMPORT_CN_NUM = { 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9, 十: 10, 两: 2 };
     function importChineseQtyChar(c) {
         return IMPORT_CN_NUM[c] || 0;
@@ -5904,6 +6347,7 @@ function removeItem(idx) {
     function processImport() {
         const text = document.getElementById("importArea").value.trim();
         if(!text) return;
+        editingHistorySource = null;
 
         db.forEach(i => { i.qty = 0; delete i.importLineNo; });
 
@@ -5911,6 +6355,10 @@ function removeItem(idx) {
         if (lines.length === 0) return;
 
         document.getElementById("pkgNameInput").value = extractImportPkgName(lines[0]);
+        const importedGroupPrice = extractImportGroupPrice(lines[0]);
+        if (importedGroupPrice) {
+            document.getElementById("groupPrice").value = importedGroupPrice;
+        }
         persistLibMeta();
 
         const dishLines = lines.slice(1);
@@ -5942,7 +6390,7 @@ function removeItem(idx) {
     }
 
     function toggleHistoryModal(show) {
-        const isMobile = window.innerWidth < 1024 || document.body.classList.contains('mobile-preview-mode') || document.body.classList.contains('mobile-real-device');
+        const isMobile = isMobileLayoutMode();
         if (isMobile) {
             // 移动端：使用全屏页面
             if (!show) { toggleHistoryEntryEditor(false); closeMobileFullscreenPage(); return; }
@@ -5988,8 +6436,9 @@ function removeItem(idx) {
             cost += (parseFloat(i.成本) || 0) * q;
         });
         const gp = parseFloat(h.groupPrice) || 0;
+        const marginBase = gp > 0 ? gp : ori;
         const disc = ori > 0 ? (gp / ori * 10) : 0;
-        const rate = gp > 0 ? ((gp - cost) / gp * 100) : 0;
+        const rate = marginBase > 0 ? ((marginBase - cost) / marginBase * 100) : 0;
         return { ori, cost, gp, disc, rate };
     }
 
@@ -6099,6 +6548,9 @@ function removeItem(idx) {
         h.items = parsed.items;
         save();
         renderHistoryList();
+        if (!document.getElementById('historyPage').classList.contains('hidden')) {
+            renderHistoryPageList();
+        }
         showToast("已保存本条修改", "success");
         if (opts && opts.closeEditor) toggleHistoryEntryEditor(false);
     }
@@ -6125,8 +6577,10 @@ function removeItem(idx) {
         <span class="hist-stat hist-stat--gp">团购价 <b>¥${m.gp.toFixed(2)}</b></span>
         <span class="hist-stat">总价 <b>¥${m.ori.toFixed(2)}</b></span>
         <span class="hist-stat">折扣 <b>${m.ori > 0 ? m.disc.toFixed(2) + "折" : "—"}</b></span>
-        <span class="${rateCls}">毛利 <b>${m.gp > 0 ? m.rate.toFixed(2) + "%" : "—"}</b></span>`;
-        document.getElementById("historyEditModal").style.display = "block";
+        <span class="${rateCls}">毛利 <b>${m.ori > 0 ? m.rate.toFixed(2) + "%" : "—"}</b></span>`;
+        const modal = document.getElementById("historyEditModal");
+        if (modal && modal.parentElement !== document.body) document.body.appendChild(modal);
+        modal.style.display = "block";
     }
 
     function toggleHistoryEntryEditor(show) {
@@ -6290,7 +6744,7 @@ function removeItem(idx) {
         populateHistoryLibSelect();
         syncHistorySortPills();
         if (!libraries.length && !(orphanedHistoryLibs && orphanedHistoryLibs.length)) {
-            container.innerHTML = "<p style=\"color:#888;padding:16px\">暂无表格，请先导入 Excel。</p>";
+            container.innerHTML = "<p style=\"color:#888;padding:16px\">暂无菜单，请先导入 Excel。</p>";
             return;
         }
         const q = (document.getElementById("historyDishSearch") && document.getElementById("historyDishSearch").value.trim().toLowerCase()) || "";
@@ -6367,7 +6821,7 @@ function removeItem(idx) {
         <span class="hist-stat hist-stat--gp">团购价 <b>¥${m.gp.toFixed(2)}</b></span>
         <span class="hist-stat">总价 <b>¥${m.ori.toFixed(2)}</b></span>
         <span class="hist-stat">折扣 <b>${m.ori > 0 ? m.disc.toFixed(2) + "折" : "—"}</b></span>
-        <span class="${rateCls}">毛利 <b>${m.gp > 0 ? m.rate.toFixed(2) + "%" : "—"}</b></span>
+        <span class="${rateCls}">毛利 <b>${m.ori > 0 ? m.rate.toFixed(2) + "%" : "—"}</b></span>
       </div>`;
             const actionsBulk = `<div class="history-item-actions">
         <button type="button" class="btn-action btn-primary hist-apply" data-hid="${escapeAttr(h.id)}" data-libid="${escapeAttr(lib.id)}">恢复此套餐</button>
@@ -6397,11 +6851,233 @@ function removeItem(idx) {
 
     // ===== 套餐历史独立页面相关函数 =====
 
+    let historyPageColumnOrder = [];
+
+    function historyVersionLinksHtml(lib, h) {
+        const rootId = historyVersionRootId(h);
+        const versions = collectHistoryVersions(rootId);
+        const related = versions.filter(({ h: item }) => item.id !== h.id);
+        if (!related.length) return "";
+        const currentIndex = versions.findIndex(({ h: item }) => item.id === h.id);
+        const links = related.map(({ lib: itemLib, h: item }) => {
+            const idx = versions.findIndex(({ h: candidate }) => candidate.id === item.id) + 1;
+            const label = idx > 0 ? `版本${idx}` : "关联版本";
+            const title = `${itemLib.name} · ${item.pkgName || "未命名套餐"} · ${new Date(item.ts).toLocaleString()}`;
+            return `<button type="button" title="${escapeAttr(title)}" onclick="editHistoryEntryOnMain('${escapeAttr(item.id)}', '${escapeAttr(itemLib.id)}')">${escapeHtml(label)}</button>`;
+        }).join("");
+        const currentText = currentIndex >= 0 ? `当前版本${currentIndex + 1}` : "版本关联";
+        return `<div class="history-version-links"><span>${escapeHtml(currentText)}</span>${links}</div>`;
+    }
+
+    function previousHistoryVersionEntry(h) {
+        if (!h) return null;
+        if (h.previousVersionId) {
+            const prev = findHistoryRecord(h.previousVersionLibId, h.previousVersionId) || findHistoryRecord(null, h.previousVersionId);
+            if (prev) return { lib: prev.holder, h: prev.h };
+            for (const holder of allHistoryHolders()) {
+                ensureLibHistory(holder);
+                const item = holder.history.find(x => x.id === h.previousVersionId);
+                if (item) return { lib: holder, h: item };
+            }
+        }
+        const versions = collectHistoryVersions(historyVersionRootId(h));
+        const idx = versions.findIndex(({ h: item }) => item.id === h.id);
+        return idx > 0 ? versions[idx - 1] : null;
+    }
+
+    function sameNum(a, b, digits = 2) {
+        const pa = parseFloat(a) || 0;
+        const pb = parseFloat(b) || 0;
+        return Math.abs(pa - pb) < Math.pow(10, -digits) / 2;
+    }
+
+    function moneyText(v) {
+        return "¥" + ((parseFloat(v) || 0).toFixed(2));
+    }
+
+    function percentText(v) {
+        return ((parseFloat(v) || 0).toFixed(2)) + "%";
+    }
+
+    function discountText(v) {
+        return ((parseFloat(v) || 0).toFixed(2)) + "折";
+    }
+
+    function itemVersionDiff(prevItems, nextItems) {
+        const prev = new Map((prevItems || []).map((it) => [String(it.商品名称 || ""), it]));
+        const next = new Map((nextItems || []).map((it) => [String(it.商品名称 || ""), it]));
+        const addedNames = [];
+        const removedNames = [];
+        const qtyChanges = [];
+        const detail = [];
+        next.forEach((it, name) => {
+            if (!prev.has(name)) {
+                addedNames.push(name);
+                detail.push(`新增 ${name}`);
+                return;
+            }
+            const oldQty = parseFloat(prev.get(name).qty) || 0;
+            const newQty = parseFloat(it.qty) || 0;
+            if (oldQty !== newQty) {
+                qtyChanges.push(`${name} ${oldQty}→${newQty}`);
+                detail.push(`${name} ${oldQty}→${newQty}`);
+            }
+        });
+        prev.forEach((it, name) => {
+            if (!next.has(name)) {
+                removedNames.push(name);
+                detail.push(`删除 ${name}`);
+            }
+        });
+        const prevOrder = (prevItems || []).map((it) => String(it.商品名称 || "")).join("|");
+        const nextOrder = (nextItems || []).map((it) => String(it.商品名称 || "")).join("|");
+        const orderChanged = !addedNames.length && !removedNames.length && !qtyChanges.length && prevOrder !== nextOrder;
+        if (orderChanged) detail.push("菜品顺序变化");
+        const changed = addedNames.length || removedNames.length || qtyChanges.length || orderChanged;
+        const summaryParts = [
+            addedNames.length ? `新增：${addedNames.join("、")}` : "",
+            removedNames.length ? `删除：${removedNames.join("、")}` : "",
+            qtyChanges.length ? `数量变化：${qtyChanges.join("、")}` : "",
+            orderChanged ? "顺序变化" : ""
+        ].filter(Boolean);
+        return { changed, summary: summaryParts.join("；"), detail: detail.join("；"), addedNames, removedNames, qtyChanges, orderChanged };
+    }
+
+    function historyDiffInfo(h) {
+        const prev = previousHistoryVersionEntry(h);
+        const empty = { fields: {}, html: "" };
+        if (!prev) return empty;
+        const pm = computeHistoryPackageMetrics(prev.h);
+        const nm = computeHistoryPackageMetrics(h);
+        const fields = {};
+        const chips = [];
+        const addChip = (label, text, cls = "") => {
+            chips.push(`<span class="history-diff-chip ${cls}">${escapeHtml(label)}：${escapeHtml(text)}</span>`);
+        };
+        const prevName = String(prev.h.pkgName || "未命名套餐");
+        const nextName = String(h.pkgName || "未命名套餐");
+        if (prevName !== nextName) {
+            fields.name = true;
+        }
+        if (String(prev.h.pkgRemark || "") !== String(h.pkgRemark || "")) {
+            fields.remark = true;
+            const oldRemark = String(prev.h.pkgRemark || "空");
+            const newRemark = String(h.pkgRemark || "空");
+            addChip("备注", `${oldRemark} → ${newRemark}`, "history-diff-chip--long");
+        }
+        if (!sameNum(prev.h.groupPrice, h.groupPrice)) {
+            fields.groupPrice = true;
+            addChip("团购价", `${moneyText(prev.h.groupPrice)} → ${moneyText(h.groupPrice)}`, "history-diff-chip--metric");
+        }
+        if (!sameNum(pm.ori, nm.ori)) {
+            fields.original = true;
+            addChip("总价", `${moneyText(pm.ori)} → ${moneyText(nm.ori)}`, "history-diff-chip--metric");
+        }
+        if (!sameNum(pm.cost, nm.cost)) {
+            fields.cost = true;
+        }
+        if (!sameNum(pm.disc, nm.disc)) {
+            fields.discount = true;
+        }
+        if (!sameNum(pm.rate, nm.rate)) {
+            fields.rate = true;
+        }
+        const itemDiff = itemVersionDiff(prev.h.items, h.items);
+        if (itemDiff.changed) {
+            fields.items = true;
+            addChip("菜品", itemDiff.summary || "已修改", "history-diff-chip--items history-diff-chip--long");
+        }
+        if (!Object.keys(fields).length) return empty;
+        if (!chips.length) return { fields, html: "" };
+        const prevTime = prev.h.ts ? new Date(prev.h.ts).toLocaleString() : "";
+        const title = itemDiff.detail || `上一版：${prev.h.pkgName || "未命名套餐"} ${prevTime}`;
+        return {
+            fields,
+            html: `<div class="history-diff-summary" title="${escapeAttr(title)}"><span class="history-diff-summary__label">较上一版变化</span>${chips.join("")}</div>`
+        };
+    }
+
+    function historyPageCardHtml(lib, h) {
+        const timeStr = new Date(h.ts).toLocaleString();
+        const lines = (h.items || []).map(x => `${x.商品名称}×${x.qty}`).join("、");
+        const short = lines.length > 120 ? lines.slice(0, 120) + "…" : lines;
+        const m = computeHistoryPackageMetrics(h);
+        const rateLow = m.rate < 45;
+        const diff = historyDiffInfo(h);
+        const bulk = historyPageBulkMode ? " history-item--bulk" : "";
+        const cb = historyPageBulkMode
+            ? `<label class="hist-bulk-cbwrap"><input type="checkbox" class="hist-bulk-cb" data-hid="${escapeAttr(h.id)}" data-libid="${escapeAttr(lib.id)}"></label>`
+            : "";
+        const gpCls = "hist-stat hist-stat--gp" + (diff.fields.groupPrice ? " hist-stat--changed" : "");
+        const oriCls = "hist-stat" + (diff.fields.original ? " hist-stat--changed" : "");
+        const costCls = "hist-stat" + (diff.fields.cost ? " hist-stat--changed" : "");
+        const discCls = "hist-stat" + (diff.fields.discount ? " hist-stat--changed" : "");
+        const rateCls = "hist-stat hist-stat--rate" + (rateLow ? " hist-stat--low" : "") + (diff.fields.rate ? " hist-stat--changed" : "");
+        const titleCls = diff.fields.name ? " class=\"history-title-changed\"" : "";
+        const linesCls = "history-item-lines" + (diff.fields.items ? " history-item-lines--changed" : "");
+        const libHue = histLibColorIndex(lib.id);
+        const statsBlock = `<div class="history-stat-tags">
+        <span class="${gpCls}">团购价 <b>¥${m.gp.toFixed(2)}</b></span>
+        <span class="${oriCls}">总价 <b>¥${m.ori.toFixed(2)}</b></span>
+        <span class="${costCls}">成本 <b>¥${m.cost.toFixed(2)}</b></span>
+        <span class="${discCls}">折扣 <b>${m.ori > 0 ? m.disc.toFixed(2) + "折" : "—"}</b></span>
+        <span class="${rateCls}">毛利 <b>${m.ori > 0 ? m.rate.toFixed(2) + "%" : "—"}</b></span>
+      </div>`;
+        const versionLinks = historyVersionLinksHtml(lib, h);
+        const actions = `<div class="history-item-actions">
+        <button type="button" class="btn-action btn-primary" onclick="editHistoryEntryOnMain('${escapeAttr(h.id)}', '${escapeAttr(lib.id)}')">编辑</button>
+        <button type="button" class="btn-action" onclick="deleteHistoryPageEntry('${escapeAttr(h.id)}', '${escapeAttr(lib.id)}')">删除</button>
+      </div>`;
+        return `<div class="history-item${bulk}">
+      ${cb}
+      <div class="history-item-inner">
+      <div class="history-item-head">
+        <span class="hist-lib-tag hist-lib-tag--${libHue}" title="${escapeAttr(lib.name)}">${escapeHtml(lib.name)}</span>
+        <b${titleCls}>${escapeHtml(h.pkgName || "未命名套餐")}</b>
+        <span class="history-item-meta">${timeStr} · ${(h.items || []).length} 道菜</span>
+      </div>
+      ${statsBlock}
+      ${(h.pkgRemark && String(h.pkgRemark).trim()) ? `<div class="history-item-remark" title="备注">备注：${escapeHtml(String(h.pkgRemark).trim())}</div>` : ""}
+      ${diff.html}
+      <div class="${linesCls}" title="${escapeAttr(lines)}">${escapeHtml(short || "（空）")}</div>
+      ${versionLinks}
+      ${actions}
+      </div>
+    </div>`;
+    }
+
+    function orderHistoryPageColumns(columns) {
+        const ids = new Set(columns.map(c => c.lib.id));
+        historyPageColumnOrder = historyPageColumnOrder.filter(id => ids.has(id));
+        columns.forEach(c => {
+            if (!historyPageColumnOrder.includes(c.lib.id)) historyPageColumnOrder.push(c.lib.id);
+        });
+        const rank = new Map(historyPageColumnOrder.map((id, i) => [id, i]));
+        return columns.sort((a, b) => (rank.get(a.lib.id) || 0) - (rank.get(b.lib.id) || 0));
+    }
+
+    function initHistoryPageBoardSortable() {
+        const board = document.getElementById("historyPageBoard");
+        if (!board || typeof Sortable === "undefined") return;
+        if (window.historyPageBoardSortable) {
+            try { window.historyPageBoardSortable.destroy(); } catch (e) { /* ignore */ }
+        }
+        window.historyPageBoardSortable = Sortable.create(board, {
+            animation: 150,
+            handle: ".history-board-column-head",
+            draggable: ".history-board-column",
+            direction: "horizontal",
+            onEnd: () => {
+                historyPageColumnOrder = Array.from(board.querySelectorAll(".history-board-column")).map(col => col.getAttribute("data-libid"));
+            }
+        });
+    }
+
     /** 渲染独立页面的历史列表 */
     function renderHistoryPageList() {
         const container = document.getElementById("historyPageContainer");
         if (!libraries.length && !(orphanedHistoryLibs && orphanedHistoryLibs.length)) {
-            container.innerHTML = "<p style=\"color:#888;padding:16px\">暂无表格，请先导入 Excel。</p>";
+            container.innerHTML = "<p style=\"color:#888;padding:16px\">暂无菜单，请先导入 Excel。</p>";
             return;
         }
         const q = (document.getElementById("historyPageSearch") && document.getElementById("historyPageSearch").value.trim().toLowerCase()) || "";
@@ -6463,65 +7139,45 @@ function removeItem(idx) {
             container.innerHTML = `<p style="color:#888;padding:16px">${hasFilter ? "没有符合当前筛选条件的历史记录。" : q ? "没有包含该关键词的历史套餐。" : "暂无历史记录。请在各表右侧点击「保存」。"}</p>`;
             return;
         }
-        container.innerHTML = list.map(({ lib, h }) => {
-            const timeStr = new Date(h.ts).toLocaleString();
-            const lines = (h.items || []).map(x => `${x.商品名称}×${x.qty}`).join("、");
-            const short = lines.length > 120 ? lines.slice(0, 120) + "…" : lines;
-            const m = computeHistoryPackageMetrics(h);
-            const rateLow = m.rate < 45;
-            const bulk = historyPageBulkMode ? " history-item--bulk" : "";
-            const cb = historyPageBulkMode
-                ? `<label class="hist-bulk-cbwrap"><input type="checkbox" class="hist-bulk-cb" data-hid="${escapeAttr(h.id)}" data-libid="${escapeAttr(lib.id)}"></label>`
-                : "";
-            const rateCls = "hist-stat hist-stat--rate" + (rateLow ? " hist-stat--low" : "");
-            const libHue = histLibColorIndex(lib.id);
-            const statsBlock = `<div class="history-stat-tags">
-        <span class="hist-stat hist-stat--gp">团购价 <b>¥${m.gp.toFixed(2)}</b></span>
-        <span class="hist-stat">总价 <b>¥${m.ori.toFixed(2)}</b></span>
-        <span class="hist-stat">折扣 <b>${m.ori > 0 ? m.disc.toFixed(2) + "折" : "—"}</b></span>
-        <span class="${rateCls}">毛利 <b>${m.gp > 0 ? m.rate.toFixed(2) + "%" : "—"}</b></span>
-      </div>`;
-            const actions = `<div class="history-item-actions">
-        <button type="button" class="btn-action btn-primary" onclick="applyHistoryEntryAndNavigate('${escapeAttr(h.id)}', '${escapeAttr(lib.id)}')">恢复此套餐</button>
-        <button type="button" class="btn-action" onclick="openHistoryPageEntryEditor('${escapeAttr(h.id)}', '${escapeAttr(lib.id)}')">编辑</button>
-        <button type="button" class="btn-action" onclick="deleteHistoryPageEntry('${escapeAttr(h.id)}', '${escapeAttr(lib.id)}')">删除</button>
-      </div>`;
-            return `<div class="history-item${bulk}">
-      ${cb}
-      <div class="history-item-inner">
-      <div class="history-item-head">
-        <span class="hist-lib-tag hist-lib-tag--${libHue}" title="${escapeAttr(lib.name)}">${escapeHtml(lib.name)}</span>
-        <b>${escapeHtml(h.pkgName || "未命名套餐")}</b>
-        <span class="history-item-meta">${timeStr} · ${(h.items || []).length} 道菜</span>
-      </div>
-      ${statsBlock}
-      ${(h.pkgRemark && String(h.pkgRemark).trim()) ? `<div class="history-item-remark" title="备注">备注：${escapeHtml(String(h.pkgRemark).trim())}</div>` : ""}
-      <div class="history-item-lines" title="${escapeAttr(lines)}">${escapeHtml(short || "（空）")}</div>
-      ${actions}
-      </div>
-    </div>`;
-        }).join("");
+        const grouped = new Map();
+        list.forEach(({ lib, h }) => {
+            if (!grouped.has(lib.id)) grouped.set(lib.id, { lib, items: [] });
+            grouped.get(lib.id).items.push(h);
+        });
+        const columns = orderHistoryPageColumns(Array.from(grouped.values()));
+        container.innerHTML = `<div id="historyPageBoard" class="history-board">
+            ${columns.map(({ lib, items }) => `
+                <section class="history-board-column" data-libid="${escapeAttr(lib.id)}">
+                    <div class="history-board-column-head" title="拖动调整列顺序">
+                        <div class="history-board-column-title">
+                            <strong>${escapeHtml(lib.name)}</strong>
+                            <span>拖动列头可调整左右顺序</span>
+                        </div>
+                        <span class="history-board-column-count">${items.length}</span>
+                    </div>
+                    <div class="history-board-card-list">
+                        ${items.map(h => historyPageCardHtml(lib, h)).join("")}
+                    </div>
+                </section>
+            `).join("")}
+        </div>`;
+        initHistoryPageBoardSortable();
     }
 
     /** 独立页面：应用历史记录并返回主页面 */
     async function applyHistoryEntryAndNavigate(hid, libId) {
-        await applyHistoryEntry(hid, libId);
-        navigateToMain();
+        const ok = await applyHistoryEntry(hid, libId);
+        if (ok) navigateToMain();
     }
 
-    /** 独立页面：打开编辑弹窗 */
+    /** 独立页面：加载历史套餐到首页编辑，保存时生成关联的新版本 */
+    async function editHistoryEntryOnMain(hid, libId) {
+        const ok = await applyHistoryEntry(hid, libId, { confirm: false, markEditing: true });
+        if (ok) navigateToMain();
+    }
+
     function openHistoryPageEntryEditor(hid, libId) {
-        // 复用现有的编辑逻辑，但调整关闭后的行为
-        openHistoryEntryEditor(hid, libId);
-        // 修改保存后的回调，使其刷新独立页面列表
-        const originalSave = saveHistoryEntryFromDom;
-        saveHistoryEntryFromDom = function(hid, libId, root, opts) {
-            originalSave(hid, libId, root, opts);
-            // 如果当前在独立页面，刷新列表
-            if (!document.getElementById('historyPage').classList.contains('hidden')) {
-                renderHistoryPageList();
-            }
-        };
+        editHistoryEntryOnMain(hid, libId);
     }
 
     /** 独立页面：删除历史记录 */
@@ -6633,7 +7289,7 @@ function removeItem(idx) {
                 "团购价": m.gp,
                 "原价": m.ori,
                 "折扣": m.ori > 0 ? m.disc.toFixed(2) + "折" : "—",
-                "毛利率": m.gp > 0 ? m.rate.toFixed(2) + "%" : "—",
+                "毛利率": m.ori > 0 ? m.rate.toFixed(2) + "%" : "—",
                 "菜品数": (h.items || []).length,
                 "保存时间": new Date(h.ts).toLocaleString(),
                 "备注": h.pkgRemark || ""
@@ -6647,28 +7303,70 @@ function removeItem(idx) {
         showToast("已导出Excel", "success");
     }
 
-    async function applyHistoryEntry(hid, libId) {
+    function downloadMenuTemplate(kind) {
+        if (typeof XLSX === "undefined") {
+            showToast("Excel 解析插件未加载成功，请刷新页面。", "error");
+            return;
+        }
+        const isUpdate = kind === "update";
+        const isImport = kind === "import";
+        const headers = ["分类", "商品名称", "单位", "售价", "成本", "菜品介绍", "菜品图片"];
+        if (isUpdate) headers.push("下架");
+        const rows = [
+            {
+                "分类": "山泉锅底",
+                "商品名称": isImport ? "山泉清水大锅" : "示例菜品",
+                "单位": "锅",
+                "售价": 28,
+                "成本": 9.02,
+                "菜品介绍": "支持 Markdown，例如：[官网](https://example.com)",
+                "菜品图片": "https://example.com/dish.jpg",
+                ...(isUpdate ? { "下架": "" } : {})
+            },
+            {
+                "分类": "特色蘸料",
+                "商品名称": isUpdate ? "需要下架的菜品" : "老坛手切羊肉",
+                "单位": "份",
+                "售价": 38,
+                "成本": 12.5,
+                "菜品介绍": "第二行示例",
+                "菜品图片": "",
+                ...(isUpdate ? { "下架": "是" } : {})
+            }
+        ];
+        const ws = XLSX.utils.json_to_sheet(rows, { header: headers });
+        const wb = XLSX.utils.book_new();
+        const sheetName = isUpdate ? "更新菜单" : (isImport ? "导入菜单" : "批量新增菜品");
+        XLSX.utils.book_append_sheet(wb, ws, sheetName);
+        XLSX.writeFile(wb, `${sheetName}模板.xlsx`);
+        showToast(`已下载${sheetName}模板`, "success");
+    }
+
+    async function applyHistoryEntry(hid, libId, opts = {}) {
+        const shouldConfirm = opts.confirm !== false;
+        const markEditing = !!opts.markEditing;
+        if (!markEditing) editingHistorySource = null;
         const lib = libraries.find(l => l.id === libId);
         const orphan = !lib ? orphanedHistoryLibs.find(l => l.id === libId) : null;
         const holder = lib || orphan;
-        if (!holder) return;
+        if (!holder) return false;
         ensureLibHistory(holder);
         const h = holder.history.find(x => x.id === hid);
-        if (!h) return;
+        if (!h) return false;
         if (orphan) {
             const cur = activeLib();
             if (!cur) {
-                showToast("请先导入或保留至少一个菜品表，再恢复套餐。", "warn");
-                return;
+                showToast("请先导入或保留至少一个菜单，再编辑该套餐。", "warn");
+                return false;
             }
             const msg = `该记录来自已删除的表格「${holder.name}」。将用当前表「${cur.name}」的菜品按菜名匹配，并覆盖套餐名、定价与购物车。是否继续？`;
-            if (!(await showConfirm(msg))) return;
+            if (shouldConfirm && !(await showConfirm(msg))) return false;
         } else {
             const fromOther = libId !== activeId;
             const msg = fromOther
                 ? `该记录来自「${holder.name}」。将切换到该表，并用此历史覆盖套餐名、定价与购物车。是否继续？`
                 : "用此历史记录覆盖当前套餐名称、定价与购物车？";
-            if (!(await showConfirm(msg))) return;
+            if (shouldConfirm && !(await showConfirm(msg))) return false;
             if (fromOther) {
                 persistLibMeta();
                 save();
@@ -6697,7 +7395,17 @@ function removeItem(idx) {
         save();
         refresh();
         toggleHistoryModal(false);
-        showToast("已从历史恢复该套餐", "success");
+        if (markEditing) {
+            editingHistorySource = {
+                libId,
+                hid,
+                rootId: ensureHistoryVersionRoot(libId, hid) || historyVersionRootId(h)
+            };
+            showToast("已加载到首页，可直接编辑后保存为新版本", "success");
+        } else {
+            showToast("已从历史恢复该套餐", "success");
+        }
+        return true;
     }
 
     async function deleteHistoryEntry(hid, libId) {
@@ -6731,8 +7439,10 @@ function removeItem(idx) {
     }
 
     function renderAdminTable() {
-        const aq = document.getElementById("adminSearchInput").value.trim().toLowerCase();
+        const searchEl = document.getElementById("adminSearchInput");
         const tbody = document.getElementById("adminTableBody");
+        if (!searchEl || !tbody) return;
+        const aq = searchEl.value.trim().toLowerCase();
         const filtered = aq ? db.filter(i => i.商品名称.toLowerCase().includes(aq) || i.分类.toLowerCase().includes(aq)) : db;
         const idxMap = idxMapFromDb();
         tbody.innerHTML = filtered.map((item) => {
@@ -6752,16 +7462,125 @@ function removeItem(idx) {
         save();
         refresh();
     }
+    function renderAddDishCategories() {
+        const host = document.getElementById("addCategoryOptions");
+        if (!host) return;
+        const cats = getMergedCategories(activeLib()).filter(Boolean);
+        const selected = cats[0] || "";
+        host.innerHTML = cats.map((c, i) =>
+            `<label class="add-dish-radio"><input type="radio" name="addCatChoice" value="${escapeAttr(c)}" ${i === 0 ? "checked" : ""} onchange="toggleAddCustomCategory(false)"> <span>${escapeHtml(c)}</span></label>`
+        ).join("") + `<label class="add-dish-radio"><input type="radio" name="addCatChoice" value="__custom__" ${selected ? "" : "checked"} onchange="toggleAddCustomCategory(true)"> <span>新增品类</span></label>`;
+        if (!selected) toggleAddCustomCategory(true);
+        else toggleAddCustomCategory(false);
+    }
+    function toggleAddCustomCategory(show) {
+        const input = document.getElementById("addCatCustom");
+        if (!input) return;
+        input.style.display = show ? "block" : "none";
+        if (show) setTimeout(() => input.focus(), 0);
+    }
+    function renderAddDishSyncLibs() {
+        const host = document.getElementById("addSyncCheckboxes");
+        const selAll = document.getElementById("addSyncSelectAll");
+        if (!host) return;
+        const others = libraries.filter(l => l.id !== activeId);
+        host.innerHTML = others.length
+            ? others.map(l => `<label class="admin-sync-lib"><input type="checkbox" name="addSyncLib" value="${escapeAttr(l.id)}" onchange="addDishUpdateSyncSelectAllState()"><span>${escapeHtml(l.name)}</span></label>`).join("")
+            : '<span style="font-size:12px;color:#999;">暂无其他菜单</span>';
+        if (selAll) {
+            selAll.checked = false;
+            selAll.indeterminate = false;
+        }
+        addDishUpdateSyncSelectAllState();
+    }
+    function addDishOnSyncSelectAll(checked) {
+        document.querySelectorAll('input[name="addSyncLib"]').forEach(cb => { cb.checked = checked; });
+        const selAll = document.getElementById("addSyncSelectAll");
+        if (selAll) selAll.indeterminate = false;
+    }
+    function addDishUpdateSyncSelectAllState() {
+        const list = Array.from(document.querySelectorAll('input[name="addSyncLib"]'));
+        const selAll = document.getElementById("addSyncSelectAll");
+        if (!selAll || !list.length) return;
+        const n = list.filter(c => c.checked).length;
+        selAll.checked = n === list.length;
+        selAll.indeterminate = n > 0 && n < list.length;
+    }
+    function selectedAddDishCategory() {
+        const checked = document.querySelector('input[name="addCatChoice"]:checked');
+        if (checked && checked.value === "__custom__") {
+            return document.getElementById("addCatCustom").value.trim();
+        }
+        return checked ? checked.value.trim() : "";
+    }
+    function resetAddDishForm() {
+        ["addName", "addUnit", "addPrice", "addCost", "addIntro", "addImg", "addCatCustom"].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.value = "";
+        });
+        const f = document.getElementById("addImgFile");
+        if (f) f.value = "";
+        renderAddDishCategories();
+        renderAddDishSyncLibs();
+    }
+    function addDishOnImageFile(inp) {
+        const f = inp.files && inp.files[0];
+        if (!f) return;
+        const r = new FileReader();
+        r.onload = () => {
+            const el = document.getElementById("addImg");
+            if (el) el.value = r.result;
+            inp.value = "";
+        };
+        r.onerror = () => showToast("读取图片失败", "error");
+        r.readAsDataURL(f);
+    }
+    function ensureLibCategoryOrder(lib, cat) {
+        if (!lib || !cat) return;
+        if (!Array.isArray(lib.catOrder)) {
+            const names = new Set((Array.isArray(lib.db) ? lib.db : []).map(row => row.分类).filter(Boolean));
+            lib.catOrder = Array.from(names).sort((a, b) => getSortWeight(a) - getSortWeight(b));
+        }
+        if (!lib.catOrder.includes(cat)) lib.catOrder.push(cat);
+    }
     function addItem() {
-        const c = document.getElementById("addCat").value, n = document.getElementById("addName").value, u = document.getElementById("addUnit").value, p = parseFloat(document.getElementById("addPrice").value)||0, s = parseFloat(document.getElementById("addCost").value)||0;
-        if(!c || !n) { showToast("分类和名称必填", "warn"); return; }
-        db.push({分类:c, 商品名称:n, 单位:u, 售价:p, 成本:s, 菜品介绍:"", 菜品图片:"", qty:0}); save(); smartRenderAdminTable(); refresh();
-        document.getElementById("addCat").value = "";
-        document.getElementById("addName").value = "";
-        document.getElementById("addUnit").value = "";
-        document.getElementById("addPrice").value = "";
-        document.getElementById("addCost").value = "";
-        showToast("菜品已新增", "success");
+        const c = selectedAddDishCategory();
+        const n = document.getElementById("addName").value.trim();
+        const u = document.getElementById("addUnit").value.trim();
+        const p = parseFloat(document.getElementById("addPrice").value) || 0;
+        const s = parseFloat(document.getElementById("addCost").value) || 0;
+        const intro = document.getElementById("addIntro").value;
+        const img = document.getElementById("addImg").value.trim();
+        if(!c || !n) { showToast("品类和菜品名称必填", "warn"); return; }
+        if (db.some(row => String(row.商品名称 || "").trim() === n)) {
+            showToast("当前菜单已有同名菜品", "warn");
+            return;
+        }
+        const row = {分类:c, 商品名称:n, 单位:u, 售价:p, 成本:s, 菜品介绍:intro, 菜品图片:img, qty:0};
+        db.push(row);
+        ensureLibCategoryOrder(activeLib(), c);
+        const ids = Array.from(document.querySelectorAll('input[name="addSyncLib"]:checked')).map(b => b.value);
+        let synced = 0;
+        let skipped = 0;
+        for (const id of ids) {
+            const lib = libraries.find(l => l.id === id);
+            if (!lib || !Array.isArray(lib.db)) continue;
+            if (lib.db.some(r => String(r.商品名称 || "").trim() === n)) {
+                skipped++;
+                continue;
+            }
+            lib.db.push(Object.assign({}, row, { qty: 0 }));
+            ensureLibCategoryOrder(lib, c);
+            synced++;
+        }
+        save();
+        smartRenderAdminTable();
+        refresh();
+        resetAddDishForm();
+        const msg = synced || skipped
+            ? `菜品已新增；同步 ${synced} 个菜单${skipped ? `，跳过 ${skipped} 个同名菜品` : ""}`
+            : "菜品已新增";
+        showToast(msg, "success");
     }
 
     /** 智能渲染：根据当前可见的页面选择渲染目标 */
@@ -6848,7 +7667,7 @@ function removeItem(idx) {
             ev.preventDefault();
             ev.stopPropagation();
         }
-        const srcImg = document.getElementById("dishDetailPreviewImg");
+        const srcImg = ev && ev.currentTarget ? ev.currentTarget : document.getElementById("dishDetailPreviewImg");
         const lb = document.getElementById("dishImageLightbox");
         const lbImg = document.getElementById("dishImageLightboxImg");
         if (!srcImg || !lb || !lbImg) return;
@@ -6957,7 +7776,7 @@ function removeItem(idx) {
         const others = libraries.filter(l => l.id !== activeId);
         host.innerHTML = others.length
             ? others.map(l => `<label><input type="checkbox" name="dishDetailSyncLib" value="${escapeAttr(l.id)}" onchange="dishDetailUpdateSyncSelectAllState()"><span>${escapeHtml(l.name)}</span></label>`).join("")
-            : '<span style="font-size:12px;color:#999">暂无其他表格（可先「导入Excel」建多表）</span>';
+            : '<span style="font-size:12px;color:#999">暂无其他菜单</span>';
         if (selAll) {
             selAll.checked = false;
             selAll.indeterminate = false;
@@ -6977,23 +7796,71 @@ function removeItem(idx) {
         selAll.checked = n === list.length;
         selAll.indeterminate = n > 0 && n < list.length;
     }
-    const DISH_DETAIL_SYNC_FLD_IDS = ["dishSyncFld_cat", "dishSyncFld_name", "dishSyncFld_unit", "dishSyncFld_price", "dishSyncFld_cost", "dishSyncFld_intro", "dishSyncFld_img"];
-    function dishDetailOnSyncFldSelectAll(checked) {
-        DISH_DETAIL_SYNC_FLD_IDS.forEach((id) => {
-            const el = document.getElementById(id);
-            if (el) el.checked = checked;
-        });
-        const master = document.getElementById("dishDetailSyncFldSelectAll");
-        if (master) master.indeterminate = false;
+    function setDishDetailMode(mode) {
+        const isEdit = mode === "edit";
+        const view = document.getElementById("dishDetailView");
+        const edit = document.getElementById("dishDetailEdit");
+        const viewActions = document.getElementById("dishDetailViewActions");
+        const editActions = document.getElementById("dishDetailEditActions");
+        if (view) view.style.display = isEdit ? "none" : "block";
+        if (edit) edit.classList.toggle("is-open", isEdit);
+        if (viewActions) viewActions.style.display = isEdit ? "none" : "flex";
+        if (editActions) editActions.style.display = isEdit ? "flex" : "none";
+        if (isEdit) hideDishDetailSync();
     }
-    function dishDetailUpdateSyncFldSelectAllState() {
-        const master = document.getElementById("dishDetailSyncFldSelectAll");
-        if (!master) return;
-        const boxes = DISH_DETAIL_SYNC_FLD_IDS.map((id) => document.getElementById(id)).filter(Boolean);
-        if (!boxes.length) return;
-        const n = boxes.filter((c) => c.checked).length;
-        master.checked = n === boxes.length;
-        master.indeterminate = n > 0 && n < boxes.length;
+    function hideDishDetailSync() {
+        const block = document.getElementById("dishDetailSyncBlock");
+        const actions = document.getElementById("dishDetailSyncActions");
+        const viewActions = document.getElementById("dishDetailViewActions");
+        const editActions = document.getElementById("dishDetailEditActions");
+        if (block) block.classList.remove("is-open");
+        if (actions) actions.style.display = "none";
+        if (viewActions && (!editActions || editActions.style.display === "none")) viewActions.style.display = "flex";
+    }
+    function showDishDetailSync() {
+        setDishDetailMode("view");
+        renderDishDetailSyncLibs();
+        const block = document.getElementById("dishDetailSyncBlock");
+        const actions = document.getElementById("dishDetailSyncActions");
+        const viewActions = document.getElementById("dishDetailViewActions");
+        if (block) block.classList.add("is-open");
+        if (actions) actions.style.display = "flex";
+        if (viewActions) viewActions.style.display = "none";
+    }
+    function updateDishDetailView(item) {
+        if (!item) return;
+        const price = Number(item.售价) || 0;
+        const cost = Number(item.成本) || 0;
+        document.getElementById("dishDetailViewName").textContent = item.商品名称 || "未命名菜品";
+        document.getElementById("dishDetailViewCat").textContent = item.分类 || "未分类";
+        document.getElementById("dishDetailViewUnit").textContent = item.单位 ? `单位：${item.单位}` : "单位：—";
+        document.getElementById("dishDetailViewPrice").textContent = `¥${price.toFixed(2)}`;
+        document.getElementById("dishDetailViewCost").textContent = `¥${cost.toFixed(2)}`;
+        document.getElementById("dishDetailViewIntro").innerHTML = renderDishIntroMarkdown(item.菜品介绍 || "");
+        const img = document.getElementById("dishDetailViewImg");
+        const ph = document.getElementById("dishDetailViewPh");
+        const media = img ? img.closest(".dish-detail-hero-media") : null;
+        const src = String(item.菜品图片 || "").trim();
+        if (src) {
+            img.onload = () => {
+                img.style.display = "block";
+                ph.style.display = "none";
+                if (media) media.classList.add("has-image");
+            };
+            img.onerror = () => {
+                img.style.display = "none";
+                ph.style.display = "flex";
+                ph.textContent = "图片无法加载";
+                if (media) media.classList.remove("has-image");
+            };
+            img.src = src;
+        } else {
+            img.removeAttribute("src");
+            img.style.display = "none";
+            ph.style.display = "flex";
+            ph.textContent = "暂无图片";
+            if (media) media.classList.remove("has-image");
+        }
     }
     function openDishDetail(idx) {
         const item = db[idx];
@@ -7009,7 +7876,9 @@ function removeItem(idx) {
         document.getElementById("dishDetailImgUrl").value = item.菜品图片 || "";
         refreshDishDetailPreview();
         renderDishDetailSyncLibs();
-        dishDetailUpdateSyncFldSelectAllState();
+        updateDishDetailView(item);
+        setDishDetailMode("view");
+        hideDishDetailSync();
         toggleDishDetail(true);
     }
     function saveDishDetail() {
@@ -7036,58 +7905,59 @@ function removeItem(idx) {
         save();
         refresh();
         renderAdminTable();
-        showToast("已保存到当前表格", "success");
+        updateDishDetailView(row);
+        setDishDetailMode("view");
+        showToast("已保存到当前菜单", "success");
     }
     function applyDishDetailSync() {
         const ids = Array.from(document.querySelectorAll('input[name="dishDetailSyncLib"]:checked')).map(b => b.value);
         if (!ids.length) {
-            showToast("请至少勾选一个其他表格", "warn");
+            showToast("请至少勾选一个其他菜单", "warn");
             return;
         }
-        const anchor = dishDetailAnchorName;
-        if (!anchor) {
-            showToast("无法匹配菜名，请关闭后重新打开详情", "warn");
+        const source = db[dishDetailIdx];
+        if (!source) {
+            showToast("无法读取当前菜品，请关闭后重新打开详情", "warn");
             return;
         }
-        const cat = document.getElementById("dishDetailCat").value.trim() || "未分类";
-        const name = document.getElementById("dishDetailName").value.trim();
-        const unit = document.getElementById("dishDetailUnit").value.trim();
-        const price = parseFloat(document.getElementById("dishDetailPrice").value) || 0;
-        const cost = parseFloat(document.getElementById("dishDetailCost").value) || 0;
-        const intro = document.getElementById("dishDetailIntro").value;
-        const img = document.getElementById("dishDetailImgUrl").value.trim();
-        const fld = {
-            分类: document.getElementById("dishSyncFld_cat").checked,
-            商品名称: document.getElementById("dishSyncFld_name").checked,
-            单位: document.getElementById("dishSyncFld_unit").checked,
-            售价: document.getElementById("dishSyncFld_price").checked,
-            成本: document.getElementById("dishSyncFld_cost").checked,
-            菜品介绍: document.getElementById("dishSyncFld_intro").checked,
-            菜品图片: document.getElementById("dishSyncFld_img").checked
+        const payload = {
+            分类: source.分类 || "未分类",
+            商品名称: source.商品名称 || "",
+            单位: source.单位 || "",
+            售价: Number(source.售价) || 0,
+            成本: Number(source.成本) || 0,
+            菜品介绍: source.菜品介绍 || "",
+            菜品图片: source.菜品图片 || "",
+            qty: 0
         };
-        if (!name && fld.商品名称) {
-            showToast("名称为空时请勿勾选「名称」同步", "warn");
+        if (!payload.商品名称) {
+            showToast("菜品名称为空，不能同步", "warn");
             return;
         }
-        let nRows = 0;
+        let updated = 0;
+        let added = 0;
         for (const id of ids) {
             const lib = libraries.find(l => l.id === id);
             if (!lib || !Array.isArray(lib.db)) continue;
-            const t = lib.db.find(r => String(r.商品名称 || "").trim() === anchor);
-            if (!t) continue;
-            if (fld.分类) t.分类 = cat;
-            if (fld.商品名称) t.商品名称 = name;
-            if (fld.单位) t.单位 = unit;
-            if (fld.售价) t.售价 = price;
-            if (fld.成本) t.成本 = cost;
-            if (fld.菜品介绍) t.菜品介绍 = intro;
-            if (fld.菜品图片) t.菜品图片 = img;
-            nRows++;
+            const t = lib.db.find(r => String(r.商品名称 || "").trim() === dishDetailAnchorName)
+                || lib.db.find(r => String(r.商品名称 || "").trim() === payload.商品名称);
+            if (t) {
+                const keepQty = t.qty || 0;
+                const keepOrder = t.manualOrder;
+                Object.assign(t, payload, { qty: keepQty });
+                if (keepOrder !== undefined) t.manualOrder = keepOrder;
+                updated++;
+            } else {
+                lib.db.push(Object.assign({}, payload));
+                added++;
+            }
+            ensureLibCategoryOrder(lib, payload.分类);
         }
         save();
         refresh();
         renderAdminTable();
-        showToast(nRows ? `已在 ${nRows} 个表格中更新匹配菜品` : "所选表格中未找到同名菜品", nRows ? "success" : "warn");
+        hideDishDetailSync();
+        showToast(`同步完成：更新 ${updated} 个菜单，新增 ${added} 个菜单`, "success");
     }
 
     function cancelDebouncedSave() {
@@ -7118,6 +7988,7 @@ function removeItem(idx) {
         if (saveDebounceTimer != null) save();
     });
     function clearCart() {
+        editingHistorySource = null;
         const pn = document.getElementById("pkgNameInput");
         if (pn) pn.value = "";
         const pr = document.getElementById("pkgRemarkInput");
@@ -7430,6 +8301,7 @@ function removeItem(idx) {
             return -1;
         };
         const iCost = colIndex(["成本"]);
+        const iOffline = colIndex(["下架", "是否下架", "下架标记", "移除", "删除"]);
         let iIntro = colIndex(["菜品介绍", "介绍"]);
         let iImg = colIndex(["菜品图片", "图片", "菜品图", "图片链接", "图片地址", "菜品图片链接"]);
         const hdrIntroLike = (h) => {
@@ -7451,8 +8323,19 @@ function removeItem(idx) {
         const sheetHasIntroCol = iIntro >= 0;
         const sheetHasImgCol = iImg >= 0;
         const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "", blankrows: true });
+        const isBlankImportRow = (obj, dataRow) => {
+            const fields = [
+                obj.分类, obj.类别, obj.商品名称, obj.名称, obj.菜品名称,
+                obj.单位, obj.售价, obj.价格, obj.成本, obj.菜品介绍,
+                obj.介绍, obj.菜品图片, obj.图片, obj.下架, obj.是否下架
+            ];
+            const hasObjectValue = fields.some(v => v !== undefined && v !== null && String(v).trim() !== "");
+            const hasRowValue = (dataRow || []).some(v => v !== undefined && v !== null && String(v).trim() !== "");
+            return !hasObjectValue && !hasRowValue;
+        };
         return jsonData.map((obj, ri) => {
             const dataRow = matrix[ri + 1] || [];
+            if (isBlankImportRow(obj, dataRow)) return null;
             const wsDataRow = ri + 1;
             let intro = String(obj.菜品介绍 || obj.介绍 || "").trim();
             let img = normalizeImageField(obj.菜品图片 || obj.图片);
@@ -7493,23 +8376,32 @@ function removeItem(idx) {
                 成本: parseFloat(obj.成本) || 0,
                 菜品介绍: intro,
                 菜品图片: img,
+                __offline: isExcelOfflineValue(iOffline >= 0 ? (dataRow[iOffline] || obj.下架 || obj.是否下架) : (obj.下架 || obj.是否下架 || obj.移除 || obj.删除)),
                 __patchIntro: sheetHasIntroCol,
                 __patchImg: sheetHasImgCol ? true : !!String(img || "").trim(),
                 qty: 0
             };
-        });
+        }).filter(Boolean);
+    }
+
+    function isExcelOfflineValue(v) {
+        if (v === true) return true;
+        const s = String(v ?? "").trim().toLowerCase();
+        if (!s) return false;
+        return ["1", "true", "yes", "y", "是", "下架", "删除", "移除", "√", "✓", "勾选"].includes(s);
     }
 
     function rowWithoutParseFlags(r) {
         const o = Object.assign({}, r);
         delete o.__patchIntro;
         delete o.__patchImg;
+        delete o.__offline;
         return o;
     }
 
     /** 合并到目标菜品库：有同名则更新分类/单位/售价/成本/介绍/图片，否则追加（保留原 qty、manualOrder） */
     function mergeParsedRowsIntoDb(targetDb, parsedRows) {
-        let added = 0, updated = 0, skipped = 0;
+        let added = 0, updated = 0, skipped = 0, removed = 0;
         for (const raw of parsedRows) {
             const name = String(raw.商品名称 || "").trim();
             if (!name) { skipped++; continue; }
@@ -7522,6 +8414,15 @@ function removeItem(idx) {
             const patchIntro = !!raw.__patchIntro;
             const patchImg = !!raw.__patchImg;
             const idx = targetDb.findIndex(x => String(x.商品名称 || "").trim() === name);
+            if (raw.__offline) {
+                if (idx !== -1) {
+                    targetDb.splice(idx, 1);
+                    removed++;
+                } else {
+                    skipped++;
+                }
+                continue;
+            }
             if (idx === -1) {
                 targetDb.push({ 分类: cat, 商品名称: name, 单位: unit, 售价: price, 成本: cost, 菜品介绍: intro, 菜品图片: img, qty: 0 });
                 added++;
@@ -7536,7 +8437,7 @@ function removeItem(idx) {
                 updated++;
             }
         }
-        return { added, updated, skipped };
+        return { added, updated, removed, skipped };
     }
 
     function adminSnapshotRowsForSync(parsedRows) {
@@ -7552,6 +8453,7 @@ function removeItem(idx) {
                 成本: parseFloat(raw.成本) || 0,
                 菜品介绍: raw.菜品介绍 != null ? String(raw.菜品介绍) : "",
                 菜品图片: normalizeImageField(raw.菜品图片),
+                __offline: !!raw.__offline,
                 __patchIntro: !!raw.__patchIntro,
                 __patchImg: !!raw.__patchImg
             };
@@ -7636,6 +8538,7 @@ function removeItem(idx) {
         const parts = [];
         if (stats.added) parts.push(`新增 ${stats.added} 条`);
         if (stats.updated) parts.push(`更新 ${stats.updated} 条`);
+        if (stats.removed) parts.push(`下架 ${stats.removed} 条`);
         if (stats.skipped) parts.push(`跳过空名 ${stats.skipped} 行`);
         const summary = parts.length ? parts.join("，") : "无有效数据";
         const msg = mode === "update"
@@ -7690,6 +8593,60 @@ function removeItem(idx) {
             } catch (err) {
                 const hint = mode === "update" ? "更新菜品" : "批量导入";
                 showToast(hint + "失败（" + file.name + "），请检查列名与格式是否与建表 Excel 一致。", "error");
+            }
+        };
+        reader.onerror = () => showToast("读取失败：" + file.name, "error");
+        reader.readAsArrayBuffer(file);
+    }
+
+    function runMenuUpdateExcelImport(file, libId) {
+        if (typeof XLSX === "undefined") {
+            showToast("Excel 解析插件未加载成功，请刷新页面。", "error");
+            return;
+        }
+        const lib = libraries.find(l => l.id === libId);
+        if (!lib || !Array.isArray(lib.db)) {
+            showToast("找不到要更新的菜单", "error");
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = async (evt) => {
+            try {
+                const ab = evt.target.result;
+                const data = new Uint8Array(ab);
+                let embedded = {};
+                try {
+                    embedded = await extractEmbeddedImagesFromXlsxBuffer(ab);
+                } catch (ex) {
+                    console.warn("embedded images:", ex);
+                }
+                let wpsMap = {};
+                try {
+                    wpsMap = await extractWpsDispimgIdToDataUrl(ab);
+                } catch (ex) {
+                    console.warn("WPS DISPIMG:", ex);
+                }
+                const workbook = XLSX.read(data, XLSX_READ_OPTS);
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const parsed = parseExcelWorksheet(worksheet, embedded, wpsMap);
+                const stats = mergeParsedRowsIntoDb(lib.db, parsed);
+                if (lib.id === activeId) {
+                    applyActiveLibrary();
+                    refresh();
+                    smartRenderAdminTable();
+                }
+                save();
+                renderLibrarySelect();
+                renderMenuManagerList((document.getElementById('menuManagerSearch') || {}).value || '');
+                const parts = [];
+                if (stats.added) parts.push(`新增 ${stats.added} 条`);
+                if (stats.updated) parts.push(`更新 ${stats.updated} 条`);
+                if (stats.removed) parts.push(`下架 ${stats.removed} 条`);
+                if (stats.skipped) parts.push(`跳过 ${stats.skipped} 行`);
+                showToast(`已更新「${lib.name}」：${parts.length ? parts.join("，") : "无有效数据"}`, parts.length ? "success" : "warn");
+            } catch (err) {
+                console.error(err);
+                showToast("更新菜单失败，请检查 Excel 列名与模板格式。", "error");
             }
         };
         reader.onerror = () => showToast("读取失败：" + file.name, "error");
@@ -7802,6 +8759,20 @@ function removeItem(idx) {
         adminRunExcelMergeImport(file, "update");
     };
 
+    function handleMenuUpdateExcelInput(e) {
+        const input = e.target;
+        const file = input.files && input.files[0];
+        input.value = "";
+        const targetId = menuUpdateTargetId;
+        menuUpdateTargetId = null;
+        if (!file || !targetId) return;
+        runMenuUpdateExcelImport(file, targetId);
+    }
+    const menuUpdateInputA = document.getElementById("menuManagerUpdateExcelIn");
+    if (menuUpdateInputA) menuUpdateInputA.onchange = handleMenuUpdateExcelInput;
+    const menuUpdateInputB = document.getElementById("menuUpdateExcelIn");
+    if (menuUpdateInputB) menuUpdateInputB.onchange = handleMenuUpdateExcelInput;
+
     // 独立页面 Excel 输入框绑定
     document.getElementById("adminPageBatchExcelIn").onchange = function (e) {
         const input = e.target;
@@ -7849,14 +8820,18 @@ function removeItem(idx) {
         document.body.classList.toggle('mobile-preview-mode');
         var btn = document.getElementById('mobilePreviewBtn');
         if (document.body.classList.contains('mobile-preview-mode')) {
-            btn.innerHTML = '<span class="preview-icon">🖥️</span> 退出预览';
-            btn.style.borderColor = 'var(--danger)';
-            btn.style.color = 'var(--danger)';
+            if (btn) {
+                btn.innerHTML = '<span class="preview-icon">🖥️</span> 退出预览';
+                btn.style.borderColor = 'var(--danger)';
+                btn.style.color = 'var(--danger)';
+            }
             reorderPricingGrid();
         } else {
-            btn.innerHTML = '<span class="preview-icon">📱</span> 移动端预览';
-            btn.style.borderColor = 'var(--primary)';
-            btn.style.color = 'var(--primary)';
+            if (btn) {
+                btn.innerHTML = '<span class="preview-icon">📱</span> 移动端预览';
+                btn.style.borderColor = 'var(--primary)';
+                btn.style.color = 'var(--primary)';
+            }
             // 退出预览时重置Tab状态
             var mainApp = document.getElementById('mainApp');
             mainApp.classList.remove('mobile-tab-package', 'mobile-tab-profile');
@@ -7976,9 +8951,8 @@ function removeItem(idx) {
         }
 
         // 判断是否管理员
-        var btnAdminPanel = document.getElementById('btnAdminPanel');
-        if (adminBtn && btnAdminPanel) {
-            var isAdmin = btnAdminPanel.style.display !== 'none';
+        if (adminBtn) {
+            var isAdmin = currentUser && currentUser.role === 'admin';
             adminBtn.style.display = isAdmin ? 'flex' : 'none';
             role.textContent = isAdmin ? '管理员' : '普通用户';
         }
@@ -8016,7 +8990,7 @@ function removeItem(idx) {
     <div style="background: var(--surface); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; flex-shrink: 0;">
         <input type="text" id="historyPageSearch" placeholder="搜菜名 / 套餐名 / 备注关键词…" oninput="renderHistoryPageList()" style="width: 220px; padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px;">
         <select id="historyPageFilterLib" onchange="renderHistoryPageList()" style="padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px;">
-            <option value="">全部表格</option>
+            <option value="">全部菜单</option>
         </select>
         <div style="display: flex; align-items: center; gap: 6px;">
             <input type="date" id="historyPageDateFrom" onchange="renderHistoryPageList()" style="padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: 13px;">
