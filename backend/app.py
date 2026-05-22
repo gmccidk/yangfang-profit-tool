@@ -5,6 +5,8 @@ import json
 import os
 import datetime
 import uuid
+import hashlib
+import hmac
 from functools import wraps
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -24,6 +26,31 @@ if not os.path.exists(DATABASE) and os.path.exists(_PROJECT_DB):
 
 # 会话有效期（小时）
 SESSION_EXPIRE_HOURS = 24
+
+
+def verify_password_hash(stored_hash, password):
+    """兼容新版 Werkzeug 生成的 scrypt 哈希，以及旧版支持的哈希。"""
+    try:
+        return check_password_hash(stored_hash, password)
+    except ValueError:
+        pass
+
+    try:
+        method, salt, hash_hex = str(stored_hash or '').split('$', 2)
+        if not method.startswith('scrypt:'):
+            return False
+        _, n, r, p = method.split(':')
+        derived = hashlib.scrypt(
+            str(password or '').encode('utf-8'),
+            salt=salt.encode('utf-8'),
+            n=int(n),
+            r=int(r),
+            p=int(p),
+            dklen=len(bytes.fromhex(hash_hex))
+        )
+        return hmac.compare_digest(derived.hex(), hash_hex)
+    except Exception:
+        return False
 
 
 def get_db():
@@ -149,7 +176,7 @@ def login():
     cur = db.execute('SELECT * FROM users WHERE username = ?', [username])
     user = cur.fetchone()
 
-    if not user or not check_password_hash(user['password_hash'], password):
+    if not user or not verify_password_hash(user['password_hash'], password):
         return jsonify({'error': '用户名或密码错误'}), 401
 
     if not user['is_active']:
@@ -379,7 +406,7 @@ def change_password():
     cur = db.execute('SELECT password_hash FROM users WHERE id = ?', [user['id']])
     row = cur.fetchone()
 
-    if not check_password_hash(row['password_hash'], data['old_password']):
+    if not verify_password_hash(row['password_hash'], data['old_password']):
         return jsonify({'error': '旧密码错误'}), 401
 
     new_password = data['new_password'].strip()
@@ -475,6 +502,53 @@ def delete_library(id):
 
     try:
         db.execute('DELETE FROM libraries WHERE id = ? AND user_id = ?', [id, user['id']])
+        db.commit()
+        return jsonify({'success': True})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/user-state/<state_key>', methods=['GET'])
+@requires_auth
+def get_user_state(state_key):
+    """获取当前用户的独立前端状态：套餐历史、当前配置等"""
+    user = request.current_user
+    db = get_db()
+    cur = db.execute(
+        'SELECT data FROM user_states WHERE user_id = ? AND state_key = ?',
+        [user['id'], state_key]
+    )
+    row = cur.fetchone()
+    if not row:
+        return jsonify({'data': None})
+    try:
+        return jsonify({'data': json.loads(row['data'])})
+    except Exception:
+        return jsonify({'data': None})
+
+
+@app.route('/api/user-state/<state_key>', methods=['PUT'])
+@requires_auth
+def put_user_state(state_key):
+    """保存当前用户的独立前端状态。不同账号互相隔离。"""
+    payload = request.json or {}
+    user = request.current_user
+    data = payload.get('data')
+    if data is None:
+        return jsonify({'error': 'No data provided'}), 400
+
+    db = get_db()
+    try:
+        now = datetime.datetime.now().isoformat()
+        db.execute(
+            '''
+            INSERT INTO user_states (user_id, state_key, data, updated_at)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(user_id, state_key)
+            DO UPDATE SET data = excluded.data, updated_at = excluded.updated_at
+            ''',
+            [user['id'], state_key, json.dumps(data), now]
+        )
         db.commit()
         return jsonify({'success': True})
     except Exception as e:

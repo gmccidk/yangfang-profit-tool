@@ -26,3 +26,13 @@ CREATE TABLE IF NOT EXISTS libraries (
     user_id INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
+
+CREATE TABLE IF NOT EXISTS user_states (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    state_key TEXT NOT NULL,
+    data TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    UNIQUE(user_id, state_key),
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);

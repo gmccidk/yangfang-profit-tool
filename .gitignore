@@ -1,3 +1,6 @@
 .DS_Store
 backend/6kl2zfzj
 backend/*.db-journal
+*.db-shm
+*.db-wal
+yangfang_with_history.db
