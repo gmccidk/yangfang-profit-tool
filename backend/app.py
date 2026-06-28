@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_from_directory, abort
+from flask import Flask, request, jsonify, send_from_directory, abort, g
 from flask_cors import CORS
 import sqlite3
 import json
@@ -13,16 +13,16 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 CORS(app)
 
-# 数据库连接 - 使用 /tmp 目录避免 disk I/O 问题
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 PARENT_DIR = os.path.dirname(BASE_DIR)
-DATABASE = os.path.join('/tmp', 'yangfang.db')
-
-# 如果 /tmp 下没有数据库，从项目目录复制
-import shutil
 _PROJECT_DB = os.path.join(BASE_DIR, 'yangfang.db')
-if not os.path.exists(DATABASE) and os.path.exists(_PROJECT_DB):
-    shutil.copy2(_PROJECT_DB, DATABASE)
+
+# 数据库连接：线上必须使用项目目录里的持久化数据库。
+# PythonAnywhere 的 /tmp 目录不适合保存菜单、图片、价格等业务数据，
+# 否则进程重启后可能回到旧数据。
+DATABASE = os.environ.get('YANGFANG_DATABASE') or os.environ.get('YANGFANG_DB_PATH') or _PROJECT_DB
+if os.path.dirname(DATABASE):
+    os.makedirs(os.path.dirname(DATABASE), exist_ok=True)
 
 # 会话有效期（小时）
 SESSION_EXPIRE_HOURS = 24
@@ -54,12 +54,21 @@ def verify_password_hash(stored_hash, password):
 
 
 def get_db():
-    conn = sqlite3.connect(DATABASE, timeout=10)
-    conn.row_factory = sqlite3.Row
-    conn.execute("PRAGMA foreign_keys = ON")
-    conn.execute("PRAGMA journal_mode=WAL")
-    conn.execute("PRAGMA synchronous=NORMAL")
-    return conn
+    if 'db' not in g:
+        conn = sqlite3.connect(DATABASE, timeout=10)
+        conn.row_factory = sqlite3.Row
+        conn.execute("PRAGMA foreign_keys = ON")
+        conn.execute("PRAGMA journal_mode=DELETE")
+        conn.execute("PRAGMA synchronous=NORMAL")
+        g.db = conn
+    return g.db
+
+
+@app.teardown_appcontext
+def close_db(error=None):
+    db = g.pop('db', None)
+    if db is not None:
+        db.close()
 
 
 def init_db():
@@ -81,12 +90,114 @@ def init_db():
             db.commit()
 
 
+def ensure_schema_migrations():
+    with app.app_context():
+        db = get_db()
+        user_columns = [row['name'] for row in db.execute('PRAGMA table_info(users)').fetchall()]
+        if 'last_login_at' not in user_columns:
+            db.execute('ALTER TABLE users ADD COLUMN last_login_at TEXT')
+            db.commit()
+
+
+def count_saved_history_records(data):
+    if not isinstance(data, dict):
+        return 0
+    total = 0
+    for lib in data.get('libraries') or []:
+        if isinstance(lib, dict) and isinstance(lib.get('history'), list):
+            total += len(lib.get('history'))
+    for lib in data.get('orphanedHistoryLibs') or []:
+        if isinstance(lib, dict) and isinstance(lib.get('history'), list):
+            total += len(lib.get('history'))
+    return total
+
+
+def slim_user_state_data(data):
+    """用户状态只保留套餐/历史/选择信息，不携带菜品图片和价格成本主数据。"""
+    if not isinstance(data, dict):
+        return data
+    out = {
+        'activeId': data.get('activeId'),
+        'orphanedHistoryLibs': data.get('orphanedHistoryLibs') if isinstance(data.get('orphanedHistoryLibs'), list) else [],
+        'libraries': []
+    }
+    for lib in data.get('libraries') or []:
+        if not isinstance(lib, dict):
+            continue
+        slim_lib = {
+            'id': lib.get('id'),
+            'backendId': lib.get('backendId'),
+            'name': lib.get('name'),
+            'pkgName': lib.get('pkgName'),
+            'groupPrice': lib.get('groupPrice'),
+            'pkgRemark': lib.get('pkgRemark'),
+            'history': lib.get('history') if isinstance(lib.get('history'), list) else [],
+            'choiceGroups': lib.get('choiceGroups') if isinstance(lib.get('choiceGroups'), list) else [],
+            'db': []
+        }
+        for row in lib.get('db') or []:
+            if not isinstance(row, dict):
+                continue
+            slim_row = {
+                '商品名称': row.get('商品名称'),
+                'qty': row.get('qty') or 0,
+                'manualOrder': row.get('manualOrder') or 0,
+                '规格': row.get('规格') or '',
+                'importLineNo': row.get('importLineNo')
+            }
+            if slim_row['qty'] or slim_row['manualOrder'] or slim_row['规格'] or slim_row['importLineNo'] is not None:
+                slim_lib['db'].append(slim_row)
+        out['libraries'].append(slim_lib)
+    return out
+
+
+def strip_library_images_data(data):
+    if not isinstance(data, dict):
+        return data
+    out = dict(data)
+    rows = []
+    for row in out.get('db') or []:
+        if not isinstance(row, dict):
+            rows.append(row)
+            continue
+        slim = dict(row)
+        if slim.get('菜品图片'):
+            slim['_imageLazy'] = True
+            slim.pop('菜品图片', None)
+        rows.append(slim)
+    out['db'] = rows
+    out['_imagesLazy'] = True
+    return out
+
+
+def merge_library_images(existing_data, incoming_data):
+    if not isinstance(existing_data, dict) or not isinstance(incoming_data, dict):
+        return incoming_data
+    existing_rows = {
+        str(row.get('商品名称') or '').strip(): row
+        for row in (existing_data.get('db') or [])
+        if isinstance(row, dict)
+    }
+    for row in incoming_data.get('db') or []:
+        if not isinstance(row, dict):
+            continue
+        row.pop('_imageLazy', None)
+        name = str(row.get('商品名称') or '').strip()
+        existing_img = existing_rows.get(name, {}).get('菜品图片') if name else None
+        if not row.get('菜品图片') and existing_img:
+            row['菜品图片'] = existing_img
+    incoming_data.pop('_imagesLazy', None)
+    incoming_data.pop('_imagesLoadedCategories', None)
+    return incoming_data
+
+
 # 初始化数据库
 if not os.path.exists(DATABASE):
     init_db()
 else:
     # 每次启动也执行 init_db 以确保新表/字段被创建
     init_db()
+ensure_schema_migrations()
 
 
 # ============================================================
@@ -191,6 +302,10 @@ def login():
         'INSERT INTO sessions (user_id, token, created_at, expires_at) VALUES (?, ?, ?, ?)',
         [user['id'], token, now.isoformat(), expires_at.isoformat()]
     )
+    db.execute(
+        'UPDATE users SET last_login_at = ? WHERE id = ?',
+        [now.isoformat(), user['id']]
+    )
     db.commit()
 
     return jsonify({
@@ -246,9 +361,32 @@ def get_users():
     """获取所有用户列表"""
     db = get_db()
     cur = db.execute(
-        'SELECT id, username, role, display_name, created_at, is_active FROM users ORDER BY id'
+        '''
+        SELECT
+            u.id,
+            u.username,
+            u.role,
+            u.display_name,
+            u.created_at,
+            COALESCE(u.last_login_at, MAX(s.created_at)) AS last_login_at,
+            u.is_active
+        FROM users u
+        LEFT JOIN sessions s ON s.user_id = u.id
+        GROUP BY u.id
+        ORDER BY u.id
+        '''
     )
     users = [dict(row) for row in cur.fetchall()]
+    states = db.execute('SELECT user_id, data FROM user_states').fetchall()
+    history_counts = {}
+    for state in states:
+        try:
+            count = count_saved_history_records(json.loads(state['data']))
+        except Exception:
+            count = 0
+        history_counts[state['user_id']] = history_counts.get(state['user_id'], 0) + count
+    for user in users:
+        user['history_count'] = history_counts.get(user['id'], 0)
     return jsonify(users)
 
 
@@ -428,21 +566,99 @@ def change_password():
 @app.route('/api/libraries', methods=['GET'])
 @requires_auth
 def get_libraries():
-    """获取库列表：管理员创建的库 + 自己创建的库"""
+    """获取库列表：普通用户只看管理员维护的共享菜单，管理员可看全部菜单。"""
     user = request.current_user
     db = get_db()
+    lite = request.args.get('lite') == '1'
+    full_id = request.args.get('full_id', type=int)
     cur = db.execute(
-        'SELECT * FROM libraries WHERE user_id = ? OR user_id IN (SELECT id FROM users WHERE role = ?) ORDER BY id',
-        [user['id'], 'admin']
+        'SELECT * FROM libraries WHERE user_id IN (SELECT id FROM users WHERE role = ?) ORDER BY id',
+        ['admin']
     )
-    libraries = [dict(row) for row in cur.fetchall()]
+    rows = cur.fetchall()
+    if lite:
+        if full_id is None and rows:
+            full_id = rows[0]['id']
+        libraries = []
+        for row in rows:
+            item = dict(row)
+            if row['id'] != full_id:
+                item['data'] = json.dumps({
+                    'id': f"backend-{row['id']}",
+                    'backendId': row['id'],
+                    'name': row['name'],
+                    'db': [],
+                    '_lazy': True
+                })
+            else:
+                try:
+                    item['data'] = json.dumps(strip_library_images_data(json.loads(row['data'])))
+                except Exception:
+                    pass
+            libraries.append(item)
+    else:
+        libraries = [dict(row) for row in rows]
     return jsonify(libraries)
+
+
+@app.route('/api/libraries/<int:id>', methods=['GET'])
+@requires_auth
+def get_library(id):
+    """获取单个共享菜单完整数据。"""
+    db = get_db()
+    cur = db.execute(
+        'SELECT * FROM libraries WHERE id = ? AND user_id IN (SELECT id FROM users WHERE role = ?)',
+        [id, 'admin']
+    )
+    row = cur.fetchone()
+    if not row:
+        return jsonify({'error': '菜单不存在或无权查看'}), 404
+    item = dict(row)
+    if request.args.get('include_images') != '1':
+        try:
+            item['data'] = json.dumps(strip_library_images_data(json.loads(item['data'])))
+        except Exception:
+            pass
+    return jsonify(item)
+
+
+@app.route('/api/libraries/<int:id>/images', methods=['GET'])
+@requires_auth
+def get_library_images(id):
+    """按分类获取菜单图片，避免首屏一次性加载全部 base64 图片。"""
+    category = request.args.get('category', '')
+    db = get_db()
+    cur = db.execute(
+        'SELECT data FROM libraries WHERE id = ? AND user_id IN (SELECT id FROM users WHERE role = ?)',
+        [id, 'admin']
+    )
+    row = cur.fetchone()
+    if not row:
+        return jsonify({'error': '菜单不存在或无权查看'}), 404
+    try:
+        data = json.loads(row['data'])
+        images = {}
+        for dish in data.get('db') or []:
+            if not isinstance(dish, dict):
+                continue
+            if category and dish.get('分类') != category:
+                continue
+            img = dish.get('菜品图片')
+            name = dish.get('商品名称')
+            if name and img:
+                images[name] = img
+        return jsonify({'category': category, 'images': images})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/api/libraries', methods=['POST'])
 @requires_auth
 def add_library():
     """为当前用户创建库"""
+    if request.current_user['role'] != 'admin':
+        return jsonify({'error': '权限不足，需要管理员权限'}), 403
+
     data = request.json
     if not data:
         return jsonify({'error': 'No data provided'}), 400
@@ -470,17 +686,28 @@ def update_library(id):
         return jsonify({'error': 'No data provided'}), 400
 
     user = request.current_user
+    if user['role'] != 'admin':
+        return jsonify({'error': '权限不足，需要管理员权限'}), 403
+
     db = get_db()
 
-    # 先确认该库属于当前用户
-    cur = db.execute('SELECT * FROM libraries WHERE id = ? AND user_id = ?', [id, user['id']])
+    # 管理员可维护共享菜单库
+    cur = db.execute('SELECT * FROM libraries WHERE id = ?', [id])
     if not cur.fetchone():
         return jsonify({'error': '库不存在或无权操作'}), 404
 
     try:
+        cur = db.execute('SELECT data FROM libraries WHERE id = ?', [id])
+        existing = cur.fetchone()
+        incoming_data = data.get('data')
+        if existing:
+            try:
+                incoming_data = merge_library_images(json.loads(existing['data']), incoming_data)
+            except Exception:
+                pass
         db.execute(
-            'UPDATE libraries SET name = ?, data = ?, updated_at = ? WHERE id = ? AND user_id = ?',
-            [data.get('name'), json.dumps(data.get('data')), datetime.datetime.now().isoformat(), id, user['id']]
+            'UPDATE libraries SET name = ?, data = ?, updated_at = ? WHERE id = ?',
+            [data.get('name'), json.dumps(incoming_data), datetime.datetime.now().isoformat(), id]
         )
         db.commit()
         return jsonify({'success': True})
@@ -493,15 +720,18 @@ def update_library(id):
 def delete_library(id):
     """删除当前用户的库"""
     user = request.current_user
+    if user['role'] != 'admin':
+        return jsonify({'error': '权限不足，需要管理员权限'}), 403
+
     db = get_db()
 
-    # 先确认该库属于当前用户
-    cur = db.execute('SELECT * FROM libraries WHERE id = ? AND user_id = ?', [id, user['id']])
+    # 管理员可删除共享菜单库
+    cur = db.execute('SELECT * FROM libraries WHERE id = ?', [id])
     if not cur.fetchone():
         return jsonify({'error': '库不存在或无权操作'}), 404
 
     try:
-        db.execute('DELETE FROM libraries WHERE id = ? AND user_id = ?', [id, user['id']])
+        db.execute('DELETE FROM libraries WHERE id = ?', [id])
         db.commit()
         return jsonify({'success': True})
     except Exception as e:
@@ -522,7 +752,7 @@ def get_user_state(state_key):
     if not row:
         return jsonify({'data': None})
     try:
-        return jsonify({'data': json.loads(row['data'])})
+        return jsonify({'data': slim_user_state_data(json.loads(row['data']))})
     except Exception:
         return jsonify({'data': None})
 
