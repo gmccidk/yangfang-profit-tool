@@ -1,6 +1,35 @@
 .DS_Store
 backend/6kl2zfzj
-backend/*.db-journal
+
+# Local databases and SQLite runtime files
+*.db
+*.sqlite
+*.sqlite3
+*.db-journal
 *.db-shm
 *.db-wal
-yangfang_with_history.db
+*.sqlite-journal
+*.sqlite-shm
+*.sqlite-wal
+
+# Local imports, exports, backups, and generated data
+*.xls
+*.xlsx
+*.csv
+*.tsv
+*.bak
+*.dump
+备份/
+backup/
+backups/
+exports/
+imports/
+uploads/
+data/
+
+# Local runtime/cache files
+*.log
+__pycache__/
+*.pyc
+.env
+.env.*
